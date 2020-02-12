@@ -27,4 +27,9 @@ public class PlatController {
     public void supprimerPlat(@PathVariable int id) {
         platService.supprimerPlat(id);
     }
+
+    @PostMapping
+    public void ajouterPlat(@RequestBody Plat plat) {
+        platService.ajouterPlat(plat);
+    }
 }
