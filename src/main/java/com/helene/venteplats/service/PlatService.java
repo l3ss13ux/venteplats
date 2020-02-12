@@ -20,4 +20,8 @@ public class PlatService {
     public List<Plat> recupererTousLesPlats() {
         return platRepository.findAll();
     }
+
+    public void supprimerPlat(int id) {
+        platRepository.deleteById(id);
+    }
 }

@@ -22,4 +22,9 @@ public class PlatController {
     public List<Plat> listerPlats() {
         return platService.recupererTousLesPlats();
     }
+
+    @PostMapping(value = "/suppression/{id}")
+    public void supprimerPlat(@PathVariable int id) {
+        platService.supprimerPlat(id);
+    }
 }
