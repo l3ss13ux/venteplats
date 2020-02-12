@@ -18,8 +18,4 @@ public class PlatService {
         return platRepository.getOne(id);
 
     }
-
-    public List<Plat> recupererTousLesPlats() {
-        return platRepository.findAll();
-    }
 }
