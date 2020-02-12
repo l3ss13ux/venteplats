@@ -25,7 +25,7 @@ public class PlatService {
         platRepository.deleteById(id);
     }
 
-    public void ajouterPlat(Plat plat) {
-        platRepository.save(plat);
+    public void insererPlat(Plat plat) {
+            platRepository.save(plat);
     }
 }

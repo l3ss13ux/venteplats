@@ -23,13 +23,18 @@ public class PlatController {
         return platService.recupererTousLesPlats();
     }
 
-    @PostMapping(value = "/suppression/{id}")
+    @DeleteMapping(value = "/{id}")
     public void supprimerPlat(@PathVariable int id) {
         platService.supprimerPlat(id);
     }
 
     @PostMapping
     public void ajouterPlat(@RequestBody Plat plat) {
-        platService.ajouterPlat(plat);
+        platService.insererPlat(plat);
+    }
+
+    @PutMapping(value = "/{id}")
+    public void modifierPlat (@PathVariable int id, @RequestBody Plat plat) {
+        platService.insererPlat(plat);
     }
 }
