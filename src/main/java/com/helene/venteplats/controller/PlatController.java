@@ -17,4 +17,9 @@ public class PlatController {
     public Plat voirPlat(@PathVariable int id) {
         return platService.recupererPlat(id);
     }
+
+    @GetMapping
+    public List<Plat> listerPlats() {
+        return platService.recupererTousLesPlats();
+    }
 }

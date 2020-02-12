@@ -14,8 +14,10 @@ public class PlatService {
     PlatRepository platRepository;
 
     public Plat recupererPlat(int id){
-
         return platRepository.getOne(id);
+    }
 
+    public List<Plat> recupererTousLesPlats() {
+        return platRepository.findAll();
     }
 }
