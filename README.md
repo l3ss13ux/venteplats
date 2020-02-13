@@ -1,4 +1,4 @@
-# Mon application *venteplats*
+# Mon application **venteplats**
 
 ## Logiciels à installer
 * IntelliJ (ou un autre IDE du même style)
@@ -21,10 +21,11 @@ Voici les informations que j'ai mis dans mon fichier "application.properties" :
 
 Libre à vous d'organiser votre fichier comme bon vous semble (avec des commentaires pour plus de précisions ou des
 sauts de lignes).
-ici, j'y ai précisé le nom de ma base de données (vente_plats), le nom et le mot de passe d'un utilisateur ayant accès
-à ma base de données et le port pour se connecter à la base de données (8081). Pour plus d'information concernant les
-propriétés que l'on peut mettre dans notre fichier "applications.properties" je vous invite à vous rendre sur [le lien
-suivant](https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html).
+Ici, j'y ai précisé le nom de ma base de données (vente_plats), le nom (helene) et le mot de passe (toto) d'un
+utilisateur ayant accès à ma base de données et le port pour se connecter à la base de données (8081). Pour plus
+ d'information concernant les propriétés que l'on peut mettre dans notre fichier "applications.properties" je vous
+ invite à vous rendre sur
+ [le lien suivant](https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html).
 
 
 
