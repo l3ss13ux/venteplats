@@ -20,4 +20,9 @@ public class UtilisateurController {
     public void supprimerUtilisateur(@PathVariable int id) {
         utilisateurService.supprimerUtilisateur(id);
     }
+
+    @PostMapping
+    public void creerUtilisateur(@RequestBody Utilisateur qq1) {
+        utilisateurService.enregistrerUtilisateur(qq1);
+    }
 }

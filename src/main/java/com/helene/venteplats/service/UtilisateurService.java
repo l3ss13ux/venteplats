@@ -17,4 +17,8 @@ public class UtilisateurService {
     public void supprimerUtilisateur(int id) {
         utilisateurRepository.deleteById(id);
     }
+
+    public void enregistrerUtilisateur(Utilisateur utilisateur) {
+        utilisateurRepository.save(utilisateur);
+    }
 }
