@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping (value = "/utilisateur")
 public class UtilisateurController {
@@ -17,5 +19,10 @@ public class UtilisateurController {
     @GetMapping(value = "/{id}")
     public Utilisateur voirUtilisateur(@PathVariable int id) {
         return utilisateurService.recupererUtilisateur(id);
+    }
+
+    @GetMapping
+    public List<Utilisateur> voirTousLesUtilisateurs() {
+        return utilisateurService.recupererTousLesUtilisateurs();
     }
 }
