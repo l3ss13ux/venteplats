@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,14 +14,18 @@ public class Plat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int identifiant;
+    @NotNull
     private String nom;
+    @NotNull
     private String type;
     private String description;
+    @NotNull
     private float prix;
     @CreationTimestamp
     @Column(name = "date_creation")
     private LocalDateTime dateCreation;
     @Column(name = "date_dispo")
+    @NotNull
     private LocalDateTime dateDispo;
 
     public Plat(int id, String name, String kind, String desc, float price, LocalDateTime createdDate, LocalDateTime availableDate) {
@@ -34,7 +39,6 @@ public class Plat {
     }
 
     public Plat() {
-
     }
 
     public int getIdentifiant() {
