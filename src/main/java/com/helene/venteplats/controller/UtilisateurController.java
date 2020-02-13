@@ -25,4 +25,9 @@ public class UtilisateurController {
     public void creerUtilisateur(@RequestBody Utilisateur qq1) {
         utilisateurService.enregistrerUtilisateur(qq1);
     }
+
+    @PutMapping(value = "/{id}")
+    public void modifierUtilisateur(@PathVariable int id, @RequestBody Utilisateur qq1) {
+        utilisateurService.enregistrerUtilisateur(qq1);
+    }
 }
