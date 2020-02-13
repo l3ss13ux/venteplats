@@ -1,4 +1,4 @@
-# Mon application **venteplats**
+# Mon application *venteplats*
 
 ## Logiciels à installer
 * IntelliJ (ou un autre IDE du même style)
