@@ -13,4 +13,8 @@ public class UtilisateurService {
     public Utilisateur recupererUtilisateur(int id) {
         return utilisateurRepository.getOne(id);
     }
+
+    public void supprimerUtilisateur(int id) {
+        utilisateurRepository.deleteById(id);
+    }
 }
