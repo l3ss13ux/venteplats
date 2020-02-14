@@ -15,8 +15,11 @@ public class PremierFiltre implements Filter {
 
         System.out.println("doFilter() method is invoked");
         HttpServletRequest httpServletRequest = (HttpServletRequest)request;
+
+        System.out.println("cle utilisateur : " + httpServletRequest.getHeader("key"));
         HttpServletResponse httpServletResponse = (HttpServletResponse)response;
         System.out.println("Context path is  " + httpServletRequest.getContextPath());
+        httpServletResponse.addHeader("key", "5");
         chain.doFilter(httpServletRequest, httpServletResponse);
         System.out.println("doFilter() method is ended");
 
