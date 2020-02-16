@@ -2,6 +2,7 @@ package com.helene.venteplats.filterConfig;
 
 import com.helene.venteplats.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -10,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class PremierFiltre implements Filter {
+public class AuthFiltre implements Filter {
     @Autowired
     UtilisateurService utilisateurService;
 
@@ -25,12 +26,10 @@ public class PremierFiltre implements Filter {
         int idUser = Integer.parseInt(httpServletRequest.getHeader("idCurrentUser"));
 
         if(utilisateurService.recupererUtilisateur(idUser) == null) {
-            httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non reconnu");
+            httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Vous n'existez pas en base de " +
+                    "données donc vous ne pouvez rien faire");
+            return;
         }
-
-        //System.out.println("cle utilisateur : " + httpServletRequest.getHeader("key"));
-        //System.out.println("Context path is  " + httpServletRequest.getContextPath());
-        //httpServletResponse.addHeader("idCurrentUser", "4");
 
         chain.doFilter(httpServletRequest, httpServletResponse);
         System.out.println("doFilter() method is ended");

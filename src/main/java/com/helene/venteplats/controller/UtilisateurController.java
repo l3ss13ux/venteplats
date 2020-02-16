@@ -20,11 +20,12 @@ public class UtilisateurController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void supprimerUtilisateur(@PathVariable int id, @RequestHeader int idCurrentUser, HttpServletResponse response) throws IOException {
+    public void supprimerUtilisateur(@PathVariable int id, @RequestHeader int idCurrentUser, HttpServletResponse response)
+            throws IOException {
         if (id == idCurrentUser) {
             utilisateurService.supprimerUtilisateur(id);
         } else {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Fonctionnalité interdite pour cet utilisateur");
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Cet utilisateur n'a pas le droit de réaliser cette action");
         }
     }
 
@@ -34,7 +35,12 @@ public class UtilisateurController {
     }
 
     @PutMapping(value = "/{id}")
-    public void modifierUtilisateur(@PathVariable int id, @RequestBody Utilisateur qq1) {
-        utilisateurService.enregistrerUtilisateur(qq1);
+    public void modifierUtilisateur(@PathVariable int id, @RequestBody Utilisateur qq1,
+                                    @RequestHeader int idCurrentUser, HttpServletResponse reponse) throws IOException {
+        if (id == idCurrentUser) {
+            utilisateurService.enregistrerUtilisateur(qq1);
+        } else {
+            reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Cet utilisateur n'a pas le droit de réaliser cette action");
+        }
     }
 }
