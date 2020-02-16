@@ -5,6 +5,9 @@ import com.helene.venteplats.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 @RestController
 @RequestMapping (value = "/utilisateurs")
 public class UtilisateurController {
@@ -17,8 +20,12 @@ public class UtilisateurController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void supprimerUtilisateur(@PathVariable int id) {
-        utilisateurService.supprimerUtilisateur(id);
+    public void supprimerUtilisateur(@PathVariable int id, @RequestHeader int idCurrentUser, HttpServletResponse response) throws IOException {
+        if (id == idCurrentUser) {
+            utilisateurService.supprimerUtilisateur(id);
+        } else {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Fonctionnalité interdite pour cet utilisateur");
+        }
     }
 
     @PostMapping
