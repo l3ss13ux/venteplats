@@ -5,6 +5,8 @@ import com.helene.venteplats.service.PlatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -29,8 +31,13 @@ public class PlatController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void supprimerPlat(@PathVariable int id) {
-        platService.supprimerPlat(id);
+    public void supprimerPlat(@PathVariable int id, @RequestHeader int idCurrentUser, HttpServletResponse reponse) throws IOException {
+        int utilisateur = platService.recupererPlat(id).getIdUtilisateur();
+        if (utilisateur == idCurrentUser) {
+            platService.supprimerPlat(id);
+        } else {
+            reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Cet utilisateur n'a pas le droit de réaliser cette action");
+        }
     }
 
     @PostMapping
@@ -39,7 +46,13 @@ public class PlatController {
     }
 
     @PutMapping(value = "/{id}")
-    public void modifierPlat (@PathVariable int id, @RequestBody Plat plat) {
-        platService.insererPlat(plat);
+    public void modifierPlat (@PathVariable int id, @RequestBody Plat plat,
+                              @RequestHeader int idCurrentUser, HttpServletResponse reponse) throws IOException {
+        int utilisateur = platService.recupererPlat(id).getIdUtilisateur();
+        if (utilisateur == idCurrentUser) {
+            platService.insererPlat(plat);
+        } else {
+            reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Cet utilisateur n'a pas le droit de réaliser cette action");
+        }
     }
 }
