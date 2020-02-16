@@ -20,6 +20,9 @@ public class Plat {
     private String type;
     private String description;
     @NotNull
+    @Column(name = "id_utilisateur")
+    private int idUtilisateur;
+    @NotNull
     private float prix;
     @CreationTimestamp
     @Column(name = "date_creation")
@@ -95,5 +98,13 @@ public class Plat {
 
     public void setDateDispo(LocalDateTime dateDispo) {
         this.dateDispo = dateDispo;
+    }
+
+    public int getIdUtilisateur() {
+        return idUtilisateur;
+    }
+
+    public void setIdUtilisateur(int idUtilisateur) {
+        this.idUtilisateur = idUtilisateur;
     }
 }

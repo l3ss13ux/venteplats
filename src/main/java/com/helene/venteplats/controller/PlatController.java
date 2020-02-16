@@ -23,6 +23,11 @@ public class PlatController {
         return platService.recupererTousLesPlats();
     }
 
+    @GetMapping (value = "/listePlats")
+    public List<Plat> listePlatsUtilisateur(@RequestHeader int idCurrentUser) {
+        return platService.recupererPlatsUtilisateur(idCurrentUser);
+    }
+
     @DeleteMapping(value = "/{id}")
     public void supprimerPlat(@PathVariable int id) {
         platService.supprimerPlat(id);
