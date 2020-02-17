@@ -25,9 +25,15 @@ public class PlatController {
         return platService.recupererTousLesPlats();
     }
 
-    @GetMapping (value = "/listePlats")
-    public List<Plat> listePlatsUtilisateur(@RequestHeader int idCurrentUser) {
-        return platService.recupererPlatsUtilisateur(idCurrentUser);
+    @GetMapping (value = "/utilisateur/{id}")
+    public List<Plat> listePlatsUtilisateur(@PathVariable int id,
+                                            @RequestHeader int idCurrentUser, HttpServletResponse reponse) throws IOException {
+        if(id == idCurrentUser) {
+            return platService.recupererPlatsUtilisateur(id);
+        } else {
+            reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Cet utilisateur n'a pas le droit de réaliser cette action");
+            return null;
+        }
     }
 
     @DeleteMapping(value = "/{id}")

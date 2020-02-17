@@ -27,18 +27,7 @@ public class PlatService {
     }
 
     public List<Plat> recupererPlatsUtilisateur(int idUtilisateur) {
-        /*int id;
-        List<Plat> platsUtilisateur = new ArrayList<>();
-        List<Plat> tousLesPlats = recupererTousLesPlats();
-        for (Plat plat : tousLesPlats) {
-            id = plat.getIdUtilisateur();
-            if (id == idUtilisateur) {
-                platsUtilisateur.add(plat);
-            }
-        }
-        return platsUtilisateur;
-         */
-        return platRepository.getPlatsPourUtilisateur(idUtilisateur);
+        return platRepository.getPlatsUnUtilisateur(idUtilisateur);
     }
 
     public void supprimerPlat(int id) {
