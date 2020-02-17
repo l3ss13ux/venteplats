@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,16 +13,13 @@ import java.time.LocalDateTime;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Plat {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int identifiant;
     @NotNull
     private String nom;
     @NotNull
     private String type;
     private String description;
-    @NotNull
-    @Column(name = "id_utilisateur")
-    private int idUtilisateur;
     @NotNull
     private float prix;
     @CreationTimestamp
@@ -31,14 +29,18 @@ public class Plat {
     @NotNull
     private LocalDateTime dateDispo;
 
-    public Plat(int id, String name, String kind, String desc, float price, LocalDateTime createdDate, LocalDateTime availableDate) {
-        this.identifiant = id;
+    @NotNull
+    @ManyToOne
+    private Utilisateur utilisateur;
+
+    public Plat(String name, String kind, String desc, float price, LocalDateTime createdDate, LocalDateTime availableDate, Utilisateur utilisateur) {
         this.nom = name;
         this.type = kind;
         this.description = desc;
         this.prix = price;
         this.dateCreation = createdDate;
         this.dateDispo = availableDate;
+        this.utilisateur = utilisateur;
     }
 
     public Plat() {
@@ -100,11 +102,11 @@ public class Plat {
         this.dateDispo = dateDispo;
     }
 
-    public int getIdUtilisateur() {
-        return idUtilisateur;
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
     }
 
-    public void setIdUtilisateur(int idUtilisateur) {
-        this.idUtilisateur = idUtilisateur;
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
     }
 }

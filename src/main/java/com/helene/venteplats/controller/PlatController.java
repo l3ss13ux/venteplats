@@ -1,6 +1,7 @@
 package com.helene.venteplats.controller;
 
 import com.helene.venteplats.model.Plat;
+import com.helene.venteplats.model.Utilisateur;
 import com.helene.venteplats.service.PlatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class PlatController {
 
     @DeleteMapping(value = "/{id}")
     public void supprimerPlat(@PathVariable int id, @RequestHeader int idCurrentUser, HttpServletResponse reponse) throws IOException {
-        int utilisateur = platService.recupererPlat(id).getIdUtilisateur();
+        int utilisateur = platService.recupererPlat(id).getUtilisateur().getIdUtilisateur();
         if (utilisateur == idCurrentUser) {
             platService.supprimerPlat(id);
         } else {
@@ -47,14 +48,19 @@ public class PlatController {
     }
 
     @PostMapping
-    public void ajouterPlat(@RequestBody Plat plat) {
-        platService.insererPlat(plat);
+    public void ajouterPlat(@RequestBody Plat plat, @RequestHeader int idCurrentUser, HttpServletResponse reponse) throws IOException {
+        int utilisateurAajouter = plat.getUtilisateur().getIdUtilisateur();
+        if (utilisateurAajouter == idCurrentUser) {
+            platService.insererPlat(plat);
+        } else {
+            reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Cet utilisateur n'a pas le droit de réaliser cette action");
+        }
     }
 
     @PutMapping(value = "/{id}")
     public void modifierPlat (@PathVariable int id, @RequestBody Plat plat,
                               @RequestHeader int idCurrentUser, HttpServletResponse reponse) throws IOException {
-        int utilisateur = platService.recupererPlat(id).getIdUtilisateur();
+        int utilisateur = platService.recupererPlat(id).getUtilisateur().getIdUtilisateur();
         if (utilisateur == idCurrentUser) {
             platService.insererPlat(plat);
         } else {
