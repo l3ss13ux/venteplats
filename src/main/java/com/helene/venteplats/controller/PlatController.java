@@ -1,7 +1,7 @@
 package com.helene.venteplats.controller;
 
-import com.helene.venteplats.model.Plat;
-import com.helene.venteplats.model.Utilisateur;
+import com.helene.venteplats.dto.PlatDTO;
+import com.helene.venteplats.dto.UtilisateurDTO;
 import com.helene.venteplats.service.PlatService;
 import com.helene.venteplats.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +20,17 @@ public class PlatController {
     UtilisateurService utilisateurService;
 
     @GetMapping(value = "/{id}")
-    public Plat voirPlat(@PathVariable int id) {
+    public PlatDTO voirPlat(@PathVariable int id) {
         return platService.recupererPlat(id);
     }
 
     @GetMapping
-    public List<Plat> listerPlats() {
+    public List<PlatDTO> listerPlats() {
         return platService.recupererTousLesPlats();
     }
 
     @GetMapping (value = "/utilisateur/{id}")
-    public List<Plat> listePlatsUtilisateur(@PathVariable int id,
+    public List<PlatDTO> listePlatsUtilisateur(@PathVariable int id,
                                             @RequestHeader int idCurrentUser, HttpServletResponse reponse) throws IOException {
         if(id == idCurrentUser) {
             return platService.recupererPlatsUtilisateur(id);
@@ -42,8 +42,8 @@ public class PlatController {
 
     @DeleteMapping(value = "/{id}")
     public void supprimerPlat(@PathVariable int id, @RequestHeader int idCurrentUser, HttpServletResponse reponse) throws IOException {
-        int utilisateur = platService.recupererPlat(id).getUtilisateur().getIdUtilisateur();
-        if (utilisateur == idCurrentUser) {
+        int idUtilisateur = platService.recupererPlat(id).getIdCreateur();
+        if (idUtilisateur == idCurrentUser) {
             platService.supprimerPlat(id);
         } else {
             reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Cet utilisateur n'a pas le droit de réaliser cette action");
@@ -51,27 +51,16 @@ public class PlatController {
     }
 
     @PostMapping
-    public void ajouterPlat(@RequestBody Plat plat, @RequestHeader int idCurrentUser, HttpServletResponse reponse)
+    public void ajouterPlat(@RequestBody PlatDTO platDTO)
             throws IOException {
-        /*
-        int utilisateurAajouter = plat.getUtilisateur().getIdUtilisateur();
-        if (utilisateurAajouter == idCurrentUser) {
-            platService.insererPlat(plat);
-        } else {
-            reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Cet utilisateur n'a pas le droit de réaliser cette action");
-        }
-        */
-        Utilisateur utilisateur = utilisateurService.recupererUtilisateur(idCurrentUser);
-        plat.setUtilisateur(utilisateur);
-        platService.insererPlat(plat);
+        platService.insererPlat(platDTO);
     }
 
     @PutMapping(value = "/{id}")
-    public void modifierPlat (@PathVariable int id, @RequestBody Plat plat,
+    public void modifierPlat (@PathVariable int id, @RequestBody PlatDTO platDTO,
                               @RequestHeader int idCurrentUser, HttpServletResponse reponse) throws IOException {
-        int utilisateur = platService.recupererPlat(id).getUtilisateur().getIdUtilisateur();
-        if (utilisateur == idCurrentUser) {
-            platService.insererPlat(plat);
+        if (platDTO.getIdCreateur() == idCurrentUser) {
+            platService.insererPlat(platDTO);
         } else {
             reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Cet utilisateur n'a pas le droit de réaliser cette action");
         }

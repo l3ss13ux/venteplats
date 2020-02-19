@@ -2,17 +2,17 @@ package com.helene.venteplats.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.helene.venteplats.dto.PlatDTO;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "plat")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Plat {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,7 +33,6 @@ public class Plat {
 
     @NotNull
     @ManyToOne
-    @JsonIgnore
     private Utilisateur utilisateur;
 
     public Plat(int id, String name, String kind, String desc, float price, LocalDateTime createdDate,
@@ -113,5 +112,27 @@ public class Plat {
 
     public void setUtilisateur(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;
+    }
+
+    public static Plat dtoToObjet(PlatDTO platDTO) {
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setIdUtilisateur(platDTO.getIdCreateur());
+        Plat plat = new Plat();
+        plat.setIdentifiant(platDTO.getIdentifiant());
+        plat.setNom(platDTO.getNom());
+        plat.setPrix(platDTO.getPrix());
+        plat.setDescription(platDTO.getDescription());
+        plat.setDateDispo(platDTO.getDisponible());
+        plat.setType(platDTO.getType());
+        plat.setUtilisateur(utilisateur);
+        return plat;
+    }
+
+    public static List<Plat> listeDtoToObjet(List<PlatDTO> platsDto) {
+        List<Plat> plats = new ArrayList<Plat>();
+        for (PlatDTO platDTO : platsDto) {
+            plats.add(Plat.dtoToObjet(platDTO));
+        }
+        return plats;
     }
 }

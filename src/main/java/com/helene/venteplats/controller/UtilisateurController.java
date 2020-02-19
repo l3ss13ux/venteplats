@@ -1,5 +1,6 @@
 package com.helene.venteplats.controller;
 
+import com.helene.venteplats.dto.UtilisateurDTO;
 import com.helene.venteplats.model.Utilisateur;
 import com.helene.venteplats.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class UtilisateurController {
     UtilisateurService utilisateurService;
 
     @GetMapping(value = "/{id}")
-    public Utilisateur voirUtilisateur(@PathVariable int id) {
+    public UtilisateurDTO voirUtilisateur(@PathVariable int id) {
         return utilisateurService.recupererUtilisateur(id);
     }
 
@@ -30,12 +31,12 @@ public class UtilisateurController {
     }
 
     @PostMapping
-    public void creerUtilisateur(@RequestBody Utilisateur qq1) {
+    public void creerUtilisateur(@RequestBody UtilisateurDTO qq1) {
         utilisateurService.enregistrerUtilisateur(qq1);
     }
 
     @PutMapping(value = "/{id}")
-    public void modifierUtilisateur(@PathVariable int id, @RequestBody Utilisateur qq1,
+    public void modifierUtilisateur(@PathVariable int id, @RequestBody UtilisateurDTO qq1,
                                     @RequestHeader int idCurrentUser, HttpServletResponse reponse) throws IOException {
         if (id == idCurrentUser) {
             utilisateurService.enregistrerUtilisateur(qq1);

@@ -1,6 +1,10 @@
 package com.helene.venteplats.dto;
 
+import com.helene.venteplats.model.Plat;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlatDTO {
     private int identifiant;
@@ -9,18 +13,18 @@ public class PlatDTO {
     private String description;
     private float prix;
     private LocalDateTime disponible;
-    private UtilisateurDTO utilisateur;
+    private int idCreateur;
 
     public PlatDTO(){}
 
-    public PlatDTO(int id, String name, String kind, String desc, float price, LocalDateTime available, UtilisateurDTO user) {
+    public PlatDTO(int id, String name, String kind, String desc, float price, LocalDateTime available, int user) {
         this.identifiant = id;
         this.nom = name;
         this.type = kind;
         this.description = desc;
         this.prix = price;
         this.disponible = available;
-        this.utilisateur = user;
+        this.idCreateur = user;
     }
 
     public int getIdentifiant() {
@@ -71,11 +75,31 @@ public class PlatDTO {
         this.disponible = disponible;
     }
 
-    public UtilisateurDTO getUtilisateur() {
-        return utilisateur;
+    public int getIdCreateur() {
+        return idCreateur;
     }
 
-    public void setUtilisateur(UtilisateurDTO utilisateur) {
-        this.utilisateur = utilisateur;
+    public void setIdCreateur(int idCreateur) {
+        this.idCreateur = idCreateur;
+    }
+
+    public static PlatDTO objetToDTO(Plat plat) {
+        PlatDTO platDTO = new PlatDTO();
+        platDTO.setIdentifiant(plat.getIdentifiant());
+        platDTO.setNom(plat.getNom());
+        platDTO.setDisponible(plat.getDateDispo());
+        platDTO.setDescription(plat.getDescription());
+        platDTO.setPrix(plat.getPrix());
+        platDTO.setType(plat.getType());
+        platDTO.setIdCreateur(plat.getUtilisateur().getIdUtilisateur());
+        return platDTO;
+    }
+
+    public static List<PlatDTO> listeObjetToTDO(List<Plat> plats) {
+        List<PlatDTO> platsDto = new ArrayList<PlatDTO>();
+        for (Plat plat : plats) {
+            platsDto.add(objetToDTO(plat));
+        }
+        return platsDto;
     }
 }
