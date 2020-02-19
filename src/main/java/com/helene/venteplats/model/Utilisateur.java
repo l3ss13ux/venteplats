@@ -1,5 +1,6 @@
 package com.helene.venteplats.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "utilisateur")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Utilisateur implements Serializable {
+public class Utilisateur {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -26,12 +27,6 @@ public class Utilisateur implements Serializable {
     private List<Plat> plats;
 
     public Utilisateur() {
-    }
-
-    public Utilisateur(int user_id, String name, LocalDate birthday) {
-        this.idUtilisateur = user_id;
-        this.nom = name;
-        this.dateAnniv = birthday;
     }
 
     public int getIdUtilisateur() {

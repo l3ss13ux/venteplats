@@ -3,6 +3,7 @@ package com.helene.venteplats.controller;
 import com.helene.venteplats.model.Plat;
 import com.helene.venteplats.model.Utilisateur;
 import com.helene.venteplats.service.PlatService;
+import com.helene.venteplats.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,8 @@ import java.util.List;
 public class PlatController {
     @Autowired
     PlatService platService;
+    @Autowired
+    UtilisateurService utilisateurService;
 
     @GetMapping(value = "/{id}")
     public Plat voirPlat(@PathVariable int id) {
@@ -48,13 +51,19 @@ public class PlatController {
     }
 
     @PostMapping
-    public void ajouterPlat(@RequestBody Plat plat, @RequestHeader int idCurrentUser, HttpServletResponse reponse) throws IOException {
+    public void ajouterPlat(@RequestBody Plat plat, @RequestHeader int idCurrentUser, HttpServletResponse reponse)
+            throws IOException {
+        /*
         int utilisateurAajouter = plat.getUtilisateur().getIdUtilisateur();
         if (utilisateurAajouter == idCurrentUser) {
             platService.insererPlat(plat);
         } else {
             reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Cet utilisateur n'a pas le droit de réaliser cette action");
         }
+        */
+        Utilisateur utilisateur = utilisateurService.recupererUtilisateur(idCurrentUser);
+        plat.setUtilisateur(utilisateur);
+        platService.insererPlat(plat);
     }
 
     @PutMapping(value = "/{id}")

@@ -1,10 +1,12 @@
 package com.helene.venteplats.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -31,9 +33,12 @@ public class Plat {
 
     @NotNull
     @ManyToOne
+    @JsonIgnore
     private Utilisateur utilisateur;
 
-    public Plat(String name, String kind, String desc, float price, LocalDateTime createdDate, LocalDateTime availableDate, Utilisateur utilisateur) {
+    public Plat(int id, String name, String kind, String desc, float price, LocalDateTime createdDate,
+                LocalDateTime availableDate, Utilisateur utilisateur) {
+        this.identifiant = id;
         this.nom = name;
         this.type = kind;
         this.description = desc;
