@@ -1,5 +1,6 @@
 package com.helene.venteplats.service;
 
+import com.helene.venteplats.dto.CreationUtilisateurDTO;
 import com.helene.venteplats.dto.UtilisateurDTO;
 import com.helene.venteplats.model.Plat;
 import com.helene.venteplats.model.Utilisateur;
@@ -30,12 +31,21 @@ public class UtilisateurService {
         utilisateurRepository.deleteById(id);
     }
 
-    public void enregistrerUtilisateur(UtilisateurDTO utilisateurDTO) {
+    public UtilisateurDTO enregistrerUtilisateur(CreationUtilisateurDTO creationUtilisateurDTO) {
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setNom(creationUtilisateurDTO.getNom());
+        utilisateur.setDateAnniv(creationUtilisateurDTO.getAnniv());
+        return UtilisateurDTO.objetToDTO(utilisateurRepository.save(utilisateur));
+    }
+
+    public UtilisateurDTO modifiererUtilisateur(UtilisateurDTO utilisateurDTO) {
         Utilisateur utilisateur = new Utilisateur();
         utilisateur.setIdUtilisateur(utilisateurDTO.getIdentifiant());
         utilisateur.setNom(utilisateurDTO.getNom());
         utilisateur.setDateAnniv(utilisateurDTO.getAnniversaire());
         utilisateur.setPlats(Plat.listeDtoToObjet(utilisateurDTO.getPlats()));
         utilisateurRepository.save(utilisateur);
+        return utilisateurDTO;
+
     }
 }

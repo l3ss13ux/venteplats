@@ -1,7 +1,9 @@
 package com.helene.venteplats.controller;
 
+import com.helene.venteplats.dto.CreationPlatDTO;
 import com.helene.venteplats.dto.PlatDTO;
 import com.helene.venteplats.dto.UtilisateurDTO;
+import com.helene.venteplats.model.Plat;
 import com.helene.venteplats.service.PlatService;
 import com.helene.venteplats.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,18 +53,20 @@ public class PlatController {
     }
 
     @PostMapping
-    public void ajouterPlat(@RequestBody PlatDTO platDTO)
+    public PlatDTO ajouterPlat(@RequestBody CreationPlatDTO creationPlatDTO, @RequestHeader int idCurrentUser)
             throws IOException {
-        platService.insererPlat(platDTO);
+        return platService.insererPlat(creationPlatDTO, idCurrentUser);
     }
 
+
     @PutMapping(value = "/{id}")
-    public void modifierPlat (@PathVariable int id, @RequestBody PlatDTO platDTO,
+    public PlatDTO modifierPlat (@PathVariable int id, @RequestBody PlatDTO platDTO,
                               @RequestHeader int idCurrentUser, HttpServletResponse reponse) throws IOException {
         if (platDTO.getIdCreateur() == idCurrentUser) {
-            platService.insererPlat(platDTO);
+            return platService.modifierPlat(platDTO);
         } else {
             reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Cet utilisateur n'a pas le droit de réaliser cette action");
+            return null;
         }
     }
 }

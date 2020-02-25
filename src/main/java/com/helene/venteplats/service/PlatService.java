@@ -1,5 +1,6 @@
 package com.helene.venteplats.service;
 
+import com.helene.venteplats.dto.CreationPlatDTO;
 import com.helene.venteplats.dto.PlatDTO;
 import com.helene.venteplats.model.Plat;
 import com.helene.venteplats.model.Utilisateur;
@@ -36,17 +37,31 @@ public class PlatService {
         platRepository.deleteById(id);
     }
 
-    public void insererPlat(PlatDTO platDTO) {
+    public PlatDTO insererPlat(CreationPlatDTO creationPlatDTO, int id) {
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setIdUtilisateur(id);
+        Plat plat = new Plat();
+        plat.setNom(creationPlatDTO.getNom());
+        plat.setType(creationPlatDTO.getType());
+        plat.setDescription(creationPlatDTO.getDescription());
+        plat.setPrix(creationPlatDTO.getPrix());
+        plat.setDateDispo(creationPlatDTO.getDisponible());
+        plat.setUtilisateur(utilisateur);
+        return PlatDTO.objetToDTO(platRepository.save(plat));
+    }
+
+    public PlatDTO modifierPlat(PlatDTO platDTO) {
         Utilisateur utilisateur = new Utilisateur();
         utilisateur.setIdUtilisateur(platDTO.getIdCreateur());
         Plat plat = new Plat();
         plat.setIdentifiant(platDTO.getIdentifiant());
         plat.setNom(platDTO.getNom());
-        plat.setPrix(platDTO.getPrix());
-        plat.setDescription(platDTO.getDescription());
-        plat.setDateDispo(platDTO.getDisponible());
         plat.setType(platDTO.getType());
+        plat.setDescription(platDTO.getDescription());
+        plat.setPrix(platDTO.getPrix());
+        plat.setDateDispo(platDTO.getDisponible());
         plat.setUtilisateur(utilisateur);
-        platRepository.save(plat);
+        plat.setDateCreation(platDTO.getCreation());
+        return PlatDTO.objetToDTO(platRepository.save(plat));
     }
 }
