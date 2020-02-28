@@ -38,14 +38,17 @@ public class UtilisateurService {
         return UtilisateurDTO.objetToDTO(utilisateurRepository.save(utilisateur));
     }
 
-    public UtilisateurDTO modifiererUtilisateur(UtilisateurDTO utilisateurDTO) {
+    public UtilisateurDTO modifiererUtilisateur(UtilisateurDTO nouvelUtilisateurDTO, int id) {
+        UtilisateurDTO ancienUtilisateurDTO = recupererUtilisateur(id);
+        ancienUtilisateurDTO.setNom(nouvelUtilisateurDTO.getNom());
+        ancienUtilisateurDTO.setAnniversaire(nouvelUtilisateurDTO.getAnniversaire());
         Utilisateur utilisateur = new Utilisateur();
-        utilisateur.setIdUtilisateur(utilisateurDTO.getIdentifiant());
-        utilisateur.setNom(utilisateurDTO.getNom());
-        utilisateur.setDateAnniv(utilisateurDTO.getAnniversaire());
-        utilisateur.setPlats(Plat.listeDtoToObjet(utilisateurDTO.getPlats()));
+        utilisateur.setIdUtilisateur(ancienUtilisateurDTO.getIdentifiant());
+        utilisateur.setNom(ancienUtilisateurDTO.getNom());
+        utilisateur.setDateAnniv(ancienUtilisateurDTO.getAnniversaire());
+        utilisateur.setPlats(Plat.listeDtoToObjet(ancienUtilisateurDTO.getPlats()));
         utilisateurRepository.save(utilisateur);
-        return utilisateurDTO;
+        return ancienUtilisateurDTO;
 
     }
 }

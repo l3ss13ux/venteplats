@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -53,17 +54,18 @@ public class PlatController {
     }
 
     @PostMapping
-    public PlatDTO ajouterPlat(@RequestBody CreationPlatDTO creationPlatDTO, @RequestHeader int idCurrentUser)
+    public PlatDTO ajouterPlat(@RequestBody @Valid CreationPlatDTO creationPlatDTO, @RequestHeader int idCurrentUser)
             throws IOException {
         return platService.insererPlat(creationPlatDTO, idCurrentUser);
     }
 
 
     @PutMapping(value = "/{id}")
-    public PlatDTO modifierPlat (@PathVariable int id, @RequestBody PlatDTO platDTO,
+    public PlatDTO modifierPlat (@PathVariable int id, @RequestBody @Valid PlatDTO platDTO,
                               @RequestHeader int idCurrentUser, HttpServletResponse reponse) throws IOException {
-        if (platDTO.getIdCreateur() == idCurrentUser) {
-            return platService.modifierPlat(platDTO);
+        int idCreateurPlat = platService.recupererPlat(id).getIdCreateur();
+        if (idCreateurPlat == idCurrentUser) {
+            return platService.modifierPlat(platDTO, id);
         } else {
             reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Cet utilisateur n'a pas le droit de réaliser cette action");
             return null;

@@ -50,18 +50,14 @@ public class PlatService {
         return PlatDTO.objetToDTO(platRepository.save(plat));
     }
 
-    public PlatDTO modifierPlat(PlatDTO platDTO) {
-        Utilisateur utilisateur = new Utilisateur();
-        utilisateur.setIdUtilisateur(platDTO.getIdCreateur());
-        Plat plat = new Plat();
-        plat.setIdentifiant(platDTO.getIdentifiant());
-        plat.setNom(platDTO.getNom());
-        plat.setType(platDTO.getType());
-        plat.setDescription(platDTO.getDescription());
-        plat.setPrix(platDTO.getPrix());
-        plat.setDateDispo(platDTO.getDisponible());
-        plat.setUtilisateur(utilisateur);
-        plat.setDateCreation(platDTO.getCreation());
-        return PlatDTO.objetToDTO(platRepository.save(plat));
+    public PlatDTO modifierPlat(PlatDTO nouveauPlatDTO, int id) {
+        PlatDTO ancienPlatDTO = recupererPlat(id);
+        ancienPlatDTO.setNom(nouveauPlatDTO.getNom());
+        ancienPlatDTO.setType(nouveauPlatDTO.getType());
+        ancienPlatDTO.setDescription(nouveauPlatDTO.getDescription());
+        ancienPlatDTO.setPrix(nouveauPlatDTO.getPrix());
+        ancienPlatDTO.setDisponible(nouveauPlatDTO.getDisponible());
+        platRepository.save(Plat.dtoToObjet(ancienPlatDTO));
+        return ancienPlatDTO;
     }
 }

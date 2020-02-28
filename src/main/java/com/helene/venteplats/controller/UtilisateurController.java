@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -32,16 +33,15 @@ public class UtilisateurController {
     }
 
     @PostMapping
-    public UtilisateurDTO creerUtilisateur(@RequestBody CreationUtilisateurDTO creationUtilisateurDTO) {
+    public UtilisateurDTO creerUtilisateur(@RequestBody @Valid CreationUtilisateurDTO creationUtilisateurDTO) {
         return utilisateurService.enregistrerUtilisateur(creationUtilisateurDTO);
     }
 
     @PutMapping(value = "/{id}")
-    public UtilisateurDTO modifierUtilisateur(@PathVariable int id, @RequestBody UtilisateurDTO qq1,
+    public UtilisateurDTO modifierUtilisateur(@PathVariable int id, @RequestBody @Valid UtilisateurDTO qq1,
                                     @RequestHeader int idCurrentUser, HttpServletResponse reponse) throws IOException {
         if (id == idCurrentUser) {
-            utilisateurService.modifiererUtilisateur(qq1);
-            return qq1;
+            return utilisateurService.modifiererUtilisateur(qq1, id);
         } else {
             reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Cet utilisateur n'a pas le droit de réaliser cette action");
             return null;

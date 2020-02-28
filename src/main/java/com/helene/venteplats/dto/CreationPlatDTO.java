@@ -1,11 +1,20 @@
 package com.helene.venteplats.dto;
 
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public class CreationPlatDTO {
-    private String nom, type;
+    @NotEmpty(message = "le nom doit être renseigné")
+    @Size(min = 3, max = 27, message = "le nom du plat doit comporter entre 3 et 27 caractères")
+    private String nom;
+    @NotEmpty(message = "le type doit être renseigné")
+    private String type;
     private String description = "";
-    private int prix;
+    @NotNull(message = "le prix doit être renseigné")
+    @Digits(integer = 2, fraction = 4)
+    private Integer prix;
+    @NotNull(message = "la date de disponibilité doit être renseignée")
+    @Future
     private LocalDateTime disponible;
 
     public CreationPlatDTO() {}
@@ -34,11 +43,11 @@ public class CreationPlatDTO {
         this.description = description;
     }
 
-    public int getPrix() {
+    public Integer getPrix() {
         return prix;
     }
 
-    public void setPrix(int prix) {
+    public void setPrix(Integer prix) {
         this.prix = prix;
     }
 

@@ -2,16 +2,24 @@ package com.helene.venteplats.dto;
 
 import com.helene.venteplats.model.Plat;
 
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlatDTO {
     private int identifiant;
+    @NotEmpty(message = "le nom ne peut être null")
+    @Size(min = 3, max = 27, message = "le nom du plat doit comporter entre 3 et 27 caractères")
     private String nom;
+    @NotEmpty(message = "le type ne peut être null")
     private String type;
     private String description;
+    @NotNull(message = "le prix ne peut être null")
+    @Digits(integer = 2, fraction = 4)
     private float prix;
+    @NotNull(message = "la date de disponibilité ne peut être nulle")
+    @Future
     private LocalDateTime disponible;
     private LocalDateTime creation;
     private int idCreateur;

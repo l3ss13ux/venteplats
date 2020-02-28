@@ -3,13 +3,17 @@ package com.helene.venteplats.dto;
 import com.helene.venteplats.model.Plat;
 import com.helene.venteplats.model.Utilisateur;
 
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UtilisateurDTO {
     private int identifiant;
+    @NotEmpty
+    @Size(min = 3, max = 27, message = "entre 3 et 27 caractères")
     private String nom;
+    @Past
     private LocalDate anniversaire;
     private List<PlatDTO> plats;
 
