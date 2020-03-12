@@ -20,6 +20,13 @@ public class PlatSpecification implements Specification<Plat> {
 
     @Override
     public Predicate toPredicate(Root<Plat> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-        return criteriaBuilder.equal(root.get(searchCriteria.getKey()),searchCriteria.getValue());
+        if(searchCriteria.getStringValue() != null) {
+            return criteriaBuilder.equal(root.get(searchCriteria.getKey()),searchCriteria.getStringValue());
+        } else if (searchCriteria.getPrixValue() != 0.0) {
+            return criteriaBuilder.lessThanOrEqualTo(root.get(searchCriteria.getKey()),searchCriteria.getPrixValue());
+        } else {
+            return criteriaBuilder.lessThanOrEqualTo(root.get(searchCriteria.getKey()), searchCriteria.getDateValue());
+        }
     }
+
 }

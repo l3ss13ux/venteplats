@@ -26,9 +26,14 @@ public class PlatController {
         return platService.recupererPlat(id);
     }
 
-    @GetMapping
+    @GetMapping(value = "/filtre/type")
     public List<PlatDTO> listerPlats(CriteresDeRecherche criteresDeRecherche) {
         return platService.filtrerPlats(criteresDeRecherche);
+    }
+
+    @GetMapping(value = "/filtre/prix")
+    public List<PlatDTO> listerPlatsBis(CriteresDeRecherche criteresDeRecherche) {
+        return platService.filtrerPlatsPrix(criteresDeRecherche);
     }
 
     @GetMapping (value = "/utilisateur/{id}")

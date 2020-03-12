@@ -1,9 +1,13 @@
 package com.helene.venteplats.service.critere;
 
+import java.time.LocalDateTime;
+
 public class SearchCriteria {
     private String key;
     private String operation;
-    private String value;
+    private String stringValue;
+    private float prixValue;
+    private LocalDateTime dateValue;
 
     public SearchCriteria() {}
 
@@ -23,11 +27,27 @@ public class SearchCriteria {
         this.operation = operation;
     }
 
-    public String getValue() {
-        return value;
+    public String getStringValue() {
+        return stringValue;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setStringValue(String stringValue) {
+        this.stringValue = stringValue;
+    }
+
+    public float getPrixValue() {
+        return prixValue;
+    }
+
+    public void setPrixValue(float prixValue) {
+        this.prixValue = prixValue;
+    }
+
+    public LocalDateTime getDateValue() {
+        return dateValue;
+    }
+
+    public void setDateValue(LocalDateTime dateValue) {
+        this.dateValue = dateValue;
     }
 }

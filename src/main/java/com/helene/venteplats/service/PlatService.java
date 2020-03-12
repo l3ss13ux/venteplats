@@ -79,8 +79,18 @@ public class PlatService {
         SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setKey("type");
         searchCriteria.setOperation("=");
-        searchCriteria.setValue(criteresDeRecherche.getTypeEqual());
+        searchCriteria.setStringValue(criteresDeRecherche.getTypeEqual());
         PlatSpecification platSpecification = new PlatSpecification(searchCriteria);
         return PlatDTO.listeObjetToDTO(platRepository.findAll(Specification.where(platSpecification)));
     }
+
+    public List<PlatDTO> filtrerPlatsPrix(CriteresDeRecherche criteresDeRecherche) {
+        SearchCriteria searchCriteria = new SearchCriteria();
+        searchCriteria.setKey("prix");
+        searchCriteria.setOperation("<=");
+        searchCriteria.setPrixValue(criteresDeRecherche.getPrixInf());
+        PlatSpecification platSpecification = new PlatSpecification(searchCriteria);
+        return PlatDTO.listeObjetToDTO(platRepository.findAll(Specification.where(platSpecification)));
+    }
+
 }
