@@ -6,11 +6,13 @@ import com.helene.venteplats.service.critere.CriteresDeRecherche;
 import com.helene.venteplats.service.PlatService;
 import com.helene.venteplats.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -34,6 +36,13 @@ public class PlatController {
     @GetMapping(value = "/filtre/prix")
     public List<PlatDTO> listerPlatsBis(CriteresDeRecherche criteresDeRecherche) {
         return platService.filtrerPlatsPrix(criteresDeRecherche);
+    }
+
+    @GetMapping(value = "/filtre/date")
+    public List<PlatDTO> listerPlatsTer(@RequestParam("disponibleAvant")
+                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                        LocalDateTime dateTime) {
+        return platService.filtrerPlatsDate(dateTime);
     }
 
     @GetMapping (value = "/utilisateur/{id}")

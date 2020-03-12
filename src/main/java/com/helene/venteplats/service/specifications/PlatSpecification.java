@@ -25,7 +25,7 @@ public class PlatSpecification implements Specification<Plat> {
         } else if (searchCriteria.getPrixValue() != 0.0) {
             return criteriaBuilder.lessThanOrEqualTo(root.get(searchCriteria.getKey()),searchCriteria.getPrixValue());
         } else {
-            return criteriaBuilder.lessThanOrEqualTo(root.get(searchCriteria.getKey()), searchCriteria.getDateValue());
+            return criteriaBuilder.lessThan(root.get(searchCriteria.getKey()), searchCriteria.getDateValue());
         }
     }
 

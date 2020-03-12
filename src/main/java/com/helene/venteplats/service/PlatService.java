@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,6 +90,15 @@ public class PlatService {
         searchCriteria.setKey("prix");
         searchCriteria.setOperation("<=");
         searchCriteria.setPrixValue(criteresDeRecherche.getPrixInf());
+        PlatSpecification platSpecification = new PlatSpecification(searchCriteria);
+        return PlatDTO.listeObjetToDTO(platRepository.findAll(Specification.where(platSpecification)));
+    }
+
+    public List<PlatDTO> filtrerPlatsDate(LocalDateTime dateTime) {
+        SearchCriteria searchCriteria = new SearchCriteria();
+        searchCriteria.setKey("dateDispo");
+        searchCriteria.setOperation("<");
+        searchCriteria.setDateValue(dateTime);
         PlatSpecification platSpecification = new PlatSpecification(searchCriteria);
         return PlatDTO.listeObjetToDTO(platRepository.findAll(Specification.where(platSpecification)));
     }
