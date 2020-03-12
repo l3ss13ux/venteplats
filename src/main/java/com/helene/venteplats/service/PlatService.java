@@ -2,11 +2,17 @@ package com.helene.venteplats.service;
 
 import com.helene.venteplats.dto.CreationPlatDTO;
 import com.helene.venteplats.dto.PlatDTO;
+import com.helene.venteplats.service.critere.CriteresDeRecherche;
 import com.helene.venteplats.model.Plat;
 import com.helene.venteplats.model.Utilisateur;
 import com.helene.venteplats.repository.PlatRepository;
+import com.helene.venteplats.service.critere.SearchCriteria;
+import com.helene.venteplats.service.specifications.PlatSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,11 +32,11 @@ public class PlatService {
     }
 
     public List<PlatDTO> recupererTousLesPlats() {
-        return PlatDTO.listeObjetToTDO(platRepository.findAll());
+        return PlatDTO.listeObjetToDTO(platRepository.findAll());
     }
 
     public List<PlatDTO> recupererPlatsUtilisateur(int idUtilisateur) {
-        return PlatDTO.listeObjetToTDO(platRepository.getPlatsUnUtilisateur(idUtilisateur));
+        return PlatDTO.listeObjetToDTO(platRepository.getPlatsUnUtilisateur(idUtilisateur));
     }
 
     public void supprimerPlat(int id) {
@@ -38,6 +44,10 @@ public class PlatService {
     }
 
     public PlatDTO insererPlat(CreationPlatDTO creationPlatDTO, int id) {
+        if (creationPlatDTO.getPrix() == 0.0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Le prix ne peut être null");
+        }
+
         Utilisateur utilisateur = new Utilisateur();
         utilisateur.setIdUtilisateur(id);
         Plat plat = new Plat();
@@ -51,6 +61,10 @@ public class PlatService {
     }
 
     public PlatDTO modifierPlat(PlatDTO nouveauPlatDTO, int id) {
+        if (nouveauPlatDTO.getPrix() == 0.0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Le prix ne peut être null");
+        }
+
         PlatDTO ancienPlatDTO = recupererPlat(id);
         ancienPlatDTO.setNom(nouveauPlatDTO.getNom());
         ancienPlatDTO.setType(nouveauPlatDTO.getType());
@@ -59,5 +73,14 @@ public class PlatService {
         ancienPlatDTO.setDisponible(nouveauPlatDTO.getDisponible());
         platRepository.save(Plat.dtoToObjet(ancienPlatDTO));
         return ancienPlatDTO;
+    }
+
+    public List<PlatDTO> filtrerPlats(CriteresDeRecherche criteresDeRecherche) {
+        SearchCriteria searchCriteria = new SearchCriteria();
+        searchCriteria.setKey("type");
+        searchCriteria.setOperation("=");
+        searchCriteria.setValue(criteresDeRecherche.getTypeEqual());
+        PlatSpecification platSpecification = new PlatSpecification(searchCriteria);
+        return PlatDTO.listeObjetToDTO(platRepository.findAll(Specification.where(platSpecification)));
     }
 }

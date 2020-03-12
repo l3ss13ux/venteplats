@@ -11,8 +11,7 @@ public class CreationPlatDTO {
     private String type;
     private String description = "";
     @NotNull(message = "le prix doit être renseigné")
-    @Digits(integer = 2, fraction = 4)
-    private Integer prix;
+    private float prix;
     @NotNull(message = "la date de disponibilité doit être renseignée")
     @Future
     private LocalDateTime disponible;
@@ -43,11 +42,11 @@ public class CreationPlatDTO {
         this.description = description;
     }
 
-    public Integer getPrix() {
+    public float getPrix() {
         return prix;
     }
 
-    public void setPrix(Integer prix) {
+    public void setPrix(float prix) {
         this.prix = prix;
     }
 

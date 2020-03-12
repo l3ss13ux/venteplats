@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlatDTO {
+    @NotNull(message = "l'identifiant ne peut être null")
     private int identifiant;
     @NotEmpty(message = "le nom ne peut être null")
     @Size(min = 3, max = 27, message = "le nom du plat doit comporter entre 3 et 27 caractères")
@@ -16,12 +17,13 @@ public class PlatDTO {
     private String type;
     private String description;
     @NotNull(message = "le prix ne peut être null")
-    @Digits(integer = 2, fraction = 4)
     private float prix;
     @NotNull(message = "la date de disponibilité ne peut être nulle")
     @Future
     private LocalDateTime disponible;
+    @NotNull(message = "la date de création ne peut être nulle")
     private LocalDateTime creation;
+    @NotNull(message = "l'identifiant du créateur ne peut être null")
     private int idCreateur;
 
     public PlatDTO(){}
@@ -115,7 +117,7 @@ public class PlatDTO {
         return platDTO;
     }
 
-    public static List<PlatDTO> listeObjetToTDO(List<Plat> plats) {
+    public static List<PlatDTO> listeObjetToDTO(List<Plat> plats) {
         List<PlatDTO> platsDto = new ArrayList<PlatDTO>();
         if (!(plats == null)) {
             for (Plat plat : plats) {

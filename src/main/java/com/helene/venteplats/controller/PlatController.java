@@ -2,8 +2,7 @@ package com.helene.venteplats.controller;
 
 import com.helene.venteplats.dto.CreationPlatDTO;
 import com.helene.venteplats.dto.PlatDTO;
-import com.helene.venteplats.dto.UtilisateurDTO;
-import com.helene.venteplats.model.Plat;
+import com.helene.venteplats.service.critere.CriteresDeRecherche;
 import com.helene.venteplats.service.PlatService;
 import com.helene.venteplats.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +27,8 @@ public class PlatController {
     }
 
     @GetMapping
-    public List<PlatDTO> listerPlats() {
-        return platService.recupererTousLesPlats();
+    public List<PlatDTO> listerPlats(CriteresDeRecherche criteresDeRecherche) {
+        return platService.filtrerPlats(criteresDeRecherche);
     }
 
     @GetMapping (value = "/utilisateur/{id}")
@@ -71,4 +70,5 @@ public class PlatController {
             return null;
         }
     }
+
 }
