@@ -1,8 +1,9 @@
 package com.helene.venteplats.dtoTest;
 
 import com.helene.venteplats.dto.CreationUtilisateurDTO;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
+
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -11,13 +12,15 @@ import javax.validation.ValidatorFactory;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Set;
-import static org.junit.Assert.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class CreationUtilisateurDTOTest {
 
     private static Validator validator;
 
-    @BeforeClass
+    @BeforeTestClass
     public static void setUp() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();

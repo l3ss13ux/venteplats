@@ -18,15 +18,18 @@ public class UtilisateurService {
     @Autowired
     UtilisateurRepository utilisateurRepository;
 
-    public UtilisateurDTO recupererUtilisateur(int id) {
+    public Optional<Utilisateur> retourneUtilisateur(int id) {
         Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
 
-        if (optionalUtilisateur.isPresent()) {
-            UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-            return utilisateurDTO.objetToDTO(optionalUtilisateur.get());
-
+        if (!optionalUtilisateur.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cet utilisateur n'existe pas en BD");
         }
-        return null;
+        return optionalUtilisateur;
+    }
+
+    public UtilisateurDTO recupererUtilisateur(int id) {
+        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+        return utilisateurDTO.objetToDTO(this.retourneUtilisateur(id).get());
     }
 
     public void supprimerUtilisateur(int id) {
@@ -41,12 +44,7 @@ public class UtilisateurService {
     }
 
     public UtilisateurDTO modifiererUtilisateur(UtilisateurDTO utilisateurDTO, int id) {
-        Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
-        if (!optionalUtilisateur.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cet utilisateur n'existe pas en BD");
-        }
-
-        Utilisateur utilisateur = optionalUtilisateur.get();
+        Utilisateur utilisateur = this.retourneUtilisateur(id).get();
         utilisateur.setNom(utilisateurDTO.getNom());
         utilisateur.setDateAnniv(utilisateurDTO.getAnniversaire());
         return UtilisateurDTO.objetToDTO(utilisateurRepository.save(utilisateur));
