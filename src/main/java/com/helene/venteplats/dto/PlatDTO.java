@@ -21,22 +21,19 @@ public class PlatDTO {
     @NotNull(message = "la date de disponibilité ne peut être nulle")
     @Future
     private LocalDateTime disponible;
-    @NotNull(message = "la date de création ne peut être nulle")
-    private LocalDateTime creation;
     @NotNull(message = "l'identifiant du créateur ne peut être null")
     private int idCreateur;
 
     public PlatDTO(){}
 
     public PlatDTO(int id, String name, String kind, String desc, float price, LocalDateTime available,
-                   LocalDateTime create, int user) {
+                   int user) {
         this.identifiant = id;
         this.nom = name;
         this.type = kind;
         this.description = desc;
         this.prix = price;
         this.disponible = available;
-        this.creation = create;
         this.idCreateur = user;
     }
 
@@ -88,14 +85,6 @@ public class PlatDTO {
         this.disponible = disponible;
     }
 
-    public LocalDateTime getCreation() {
-        return creation;
-    }
-
-    public void setCreation(LocalDateTime creation) {
-        this.creation = creation;
-    }
-
     public int getIdCreateur() {
         return idCreateur;
     }
@@ -112,7 +101,6 @@ public class PlatDTO {
         platDTO.setDescription(plat.getDescription());
         platDTO.setPrix(plat.getPrix());
         platDTO.setType(plat.getType());
-        platDTO.setCreation(plat.getDateCreation());
         platDTO.setIdCreateur(plat.getUtilisateur().getIdUtilisateur());
         return platDTO;
     }

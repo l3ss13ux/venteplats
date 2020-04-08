@@ -114,27 +114,4 @@ public class Plat {
         this.utilisateur = utilisateur;
     }
 
-
-
-    public static Plat dtoToObjet(PlatDTO platDTO) {
-        Utilisateur utilisateur = new Utilisateur();
-        utilisateur.setIdUtilisateur(platDTO.getIdCreateur());
-        Plat plat = new Plat();
-        plat.setIdentifiant(platDTO.getIdentifiant());
-        plat.setNom(platDTO.getNom());
-        plat.setPrix(platDTO.getPrix());
-        plat.setDescription(platDTO.getDescription());
-        plat.setDateDispo(platDTO.getDisponible());
-        plat.setType(platDTO.getType());
-        plat.setUtilisateur(utilisateur);
-        return plat;
-    }
-
-    public static List<Plat> listeDtoToObjet(List<PlatDTO> platsDto) {
-        List<Plat> plats = new ArrayList<Plat>();
-        for (PlatDTO platDTO : platsDto) {
-            plats.add(Plat.dtoToObjet(platDTO));
-        }
-        return plats;
-    }
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,44 +62,67 @@ public class PlatService {
         return PlatDTO.objetToDTO(platRepository.save(plat));
     }
 
-    public PlatDTO modifierPlat(PlatDTO nouveauPlatDTO, int id) {
-        if (nouveauPlatDTO.getPrix() == 0.0) {
+    public PlatDTO modifierPlat(PlatDTO platDTO, int id) {
+        if (platDTO.getPrix() == 0.0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Le prix ne peut être null");
         }
-
-        PlatDTO ancienPlatDTO = recupererPlat(id);
-        ancienPlatDTO.setNom(nouveauPlatDTO.getNom());
-        ancienPlatDTO.setType(nouveauPlatDTO.getType());
-        ancienPlatDTO.setDescription(nouveauPlatDTO.getDescription());
-        ancienPlatDTO.setPrix(nouveauPlatDTO.getPrix());
-        ancienPlatDTO.setDisponible(nouveauPlatDTO.getDisponible());
-        platRepository.save(Plat.dtoToObjet(ancienPlatDTO));
-        return ancienPlatDTO;
+        Optional<Plat> optionalPlat = platRepository.findById(id);
+        if (!optionalPlat.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ce plat n'existe pas en BD");
+        }
+        Plat plat = optionalPlat.get();
+        plat.setNom(platDTO.getNom());
+        plat.setType(platDTO.getType());
+        plat.setPrix(platDTO.getPrix());
+        plat.setDescription(platDTO.getDescription());
+        plat.setDateDispo(platDTO.getDisponible());
+        return PlatDTO.objetToDTO(platRepository.save(plat));
     }
 
-    public List<PlatDTO> filtrerPlats(CriteresDeRecherche criteresDeRecherche) {
-        SearchCriteria searchCriteria = new SearchCriteria();
-        searchCriteria.setKey("type");
-        searchCriteria.setOperation("=");
-        searchCriteria.setStringValue(criteresDeRecherche.getTypeEqual());
-        PlatSpecification platSpecification = new PlatSpecification(searchCriteria);
-        return PlatDTO.listeObjetToDTO(platRepository.findAll(Specification.where(platSpecification)));
-    }
+    public List<PlatDTO> filtrerPlats(CriteresDeRecherche critere) {
+        SearchCriteria searchCriteria1 = new SearchCriteria();
+        SearchCriteria searchCriteria2 = new SearchCriteria();
+        //SearchCriteria searchCriteria3 = new SearchCriteria();
+        if (critere.getTypeEqual() != null ) {
+            searchCriteria1.setKey("type");
+            searchCriteria1.setOperation("=");
+            searchCriteria1.setValue(critere.getTypeEqual());
+        }
+        if (critere.getPrixInf() != 0.0) {
+            searchCriteria2.setKey("prix");
+            searchCriteria2.setOperation("<=");
+            searchCriteria2.setValue(critere.getPrixInf());
+        }
+        /*
+        if (critere.getDisponibleAvant() != null) {
+            searchCriteria3.setKey("dateDispo");
+            searchCriteria3.setOperation("<");
+            searchCriteria3.setDateValue(critere.getDisponibleAvant());
+        }
+*/
 
-    public List<PlatDTO> filtrerPlatsPrix(CriteresDeRecherche criteresDeRecherche) {
-        SearchCriteria searchCriteria = new SearchCriteria();
-        searchCriteria.setKey("prix");
-        searchCriteria.setOperation("<=");
-        searchCriteria.setPrixValue(criteresDeRecherche.getPrixInf());
-        PlatSpecification platSpecification = new PlatSpecification(searchCriteria);
-        return PlatDTO.listeObjetToDTO(platRepository.findAll(Specification.where(platSpecification)));
-    }
+        PlatSpecification platSpecification1 = new PlatSpecification(searchCriteria1);
 
+        PlatSpecification platSpecification2 = new PlatSpecification(searchCriteria2);
+
+        //PlatSpecification platSpecification3 = new PlatSpecification(searchCriteria3);
+
+        return PlatDTO.listeObjetToDTO(platRepository.findAll(Specification.where(platSpecification1)
+                .and(platSpecification2)));
+
+        /*
+        return PlatDTO.listeObjetToDTO(platRepository.findAll(Specification.where(platSpecification1)
+                .and(platSpecification2)
+                .and(platSpecification3)));
+
+         */
+    }
+    
     public List<PlatDTO> filtrerPlatsDate(LocalDateTime dateTime) {
         SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setKey("dateDispo");
         searchCriteria.setOperation("<");
-        searchCriteria.setDateValue(dateTime);
+        searchCriteria.setValue(dateTime);
         PlatSpecification platSpecification = new PlatSpecification(searchCriteria);
         return PlatDTO.listeObjetToDTO(platRepository.findAll(Specification.where(platSpecification)));
     }

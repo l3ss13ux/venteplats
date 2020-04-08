@@ -7,7 +7,9 @@ import com.helene.venteplats.model.Utilisateur;
 import com.helene.venteplats.repository.PlatRepository;
 import com.helene.venteplats.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -38,17 +40,16 @@ public class UtilisateurService {
         return UtilisateurDTO.objetToDTO(utilisateurRepository.save(utilisateur));
     }
 
-    public UtilisateurDTO modifiererUtilisateur(UtilisateurDTO nouvelUtilisateurDTO, int id) {
-        UtilisateurDTO ancienUtilisateurDTO = recupererUtilisateur(id);
-        ancienUtilisateurDTO.setNom(nouvelUtilisateurDTO.getNom());
-        ancienUtilisateurDTO.setAnniversaire(nouvelUtilisateurDTO.getAnniversaire());
-        Utilisateur utilisateur = new Utilisateur();
-        utilisateur.setIdUtilisateur(ancienUtilisateurDTO.getIdentifiant());
-        utilisateur.setNom(ancienUtilisateurDTO.getNom());
-        utilisateur.setDateAnniv(ancienUtilisateurDTO.getAnniversaire());
-        utilisateur.setPlats(Plat.listeDtoToObjet(ancienUtilisateurDTO.getPlats()));
-        utilisateurRepository.save(utilisateur);
-        return ancienUtilisateurDTO;
+    public UtilisateurDTO modifiererUtilisateur(UtilisateurDTO utilisateurDTO, int id) {
+        Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
+        if (!optionalUtilisateur.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cet utilisateur n'existe pas en BD");
+        }
+
+        Utilisateur utilisateur = optionalUtilisateur.get();
+        utilisateur.setNom(utilisateurDTO.getNom());
+        utilisateur.setDateAnniv(utilisateurDTO.getAnniversaire());
+        return UtilisateurDTO.objetToDTO(utilisateurRepository.save(utilisateur));
 
     }
 }

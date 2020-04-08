@@ -29,6 +29,13 @@ public class Utilisateur {
 
     public Utilisateur() {
     }
+/*
+    public Utilisateur(int id, String unNom, LocalDate uneDateAnniv) {
+        this.idUtilisateur = id;
+        this.nom = unNom;
+        this.dateAnniv = uneDateAnniv;
+    }
+ */
 
     public int getIdUtilisateur() {
         return idUtilisateur;
