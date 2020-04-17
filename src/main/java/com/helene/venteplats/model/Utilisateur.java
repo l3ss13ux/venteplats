@@ -29,13 +29,13 @@ public class Utilisateur {
 
     public Utilisateur() {
     }
-/*
+
     public Utilisateur(int id, String unNom, LocalDate uneDateAnniv) {
         this.idUtilisateur = id;
         this.nom = unNom;
         this.dateAnniv = uneDateAnniv;
     }
- */
+
 
     public int getIdUtilisateur() {
         return idUtilisateur;
@@ -68,5 +68,21 @@ public class Utilisateur {
     public void setPlats(List<Plat> plats) {
         this.plats = plats;
     }
+
+    public static Utilisateur of(int id, String name, LocalDate aniv) {
+        return new Utilisateur(id, name, aniv);
+    }
+
+    /*
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Utilisateur) {
+            Utilisateur utilisateur = (Utilisateur) obj;
+
+            return utilisateur.getNom().equals(this.nom) && utilisateur.getDateAnniv().equals(this.dateAnniv);
+        }
+        return false;
+    }
+    */
 
 }

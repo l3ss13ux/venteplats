@@ -26,7 +26,7 @@ public class AuthFiltre implements Filter {
         int idUser = Integer.parseInt(httpServletRequest.getHeader("idCurrentUser"));
 
         if(utilisateurService.recupererUtilisateur(idUser) == null) {
-            httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Vous n'existez pas en base de " +
+            httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous n'existez pas en base de " +
                     "données donc vous ne pouvez rien faire");
             return;
         }

@@ -28,7 +28,7 @@ public class UtilisateurController {
         if (id == idCurrentUser) {
             utilisateurService.supprimerUtilisateur(id);
         } else {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Cet utilisateur n'a pas le droit de réaliser cette action");
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Cet utilisateur n'a pas le droit de réaliser cette action");
         }
     }
 
@@ -43,7 +43,7 @@ public class UtilisateurController {
         if (id == idCurrentUser) {
             return utilisateurService.modifiererUtilisateur(qq1, id);
         } else {
-            reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Cet utilisateur n'a pas le droit de réaliser cette action");
+            reponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Cet utilisateur n'a pas le droit de réaliser cette action");
             return null;
         }
     }
