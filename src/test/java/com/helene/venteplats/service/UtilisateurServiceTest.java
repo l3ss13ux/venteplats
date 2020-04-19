@@ -35,7 +35,7 @@ public class UtilisateurServiceTest {
 
 
     @Test
-    public void testRecupererUtilisateurQuiExiste() throws ResponseStatusException {
+    public void testRecupererUtilisateurQuiExiste() {
         LocalDate dateAnniv = LocalDate.of(1993, Month.MARCH, 28);
         LocalDateTime disponible = LocalDateTime.of(2020,Month.APRIL, 14, 18,00,00);
         LocalDateTime creation = LocalDateTime.of(2020,Month.MARCH, 1, 13,45,00);
@@ -62,7 +62,7 @@ public class UtilisateurServiceTest {
 
 
     @Test
-    public void testRecupererUtilisateurQuiNExistePas() throws ResponseStatusException {
+    public void testRecupererUtilisateurQuiNExistePas() {
         when(utilisateurRepository.findById(5)).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(ResponseStatusException.class, () -> utilisateurService.recupererUtilisateur(5));
@@ -110,7 +110,7 @@ public class UtilisateurServiceTest {
 
 
     @Test
-    public void testModifierUtilisateurSansPLats() throws ResponseStatusException {
+    public void testModifierUtilisateurSansPLats() {
         LocalDate anniv = LocalDate.of(1993, Month.MARCH, 28);
 
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO(5, "Helene", anniv, new ArrayList<PlatDTO>());
@@ -141,7 +141,7 @@ public class UtilisateurServiceTest {
 
 
     @Test
-    public void testModifierUtilisateurAvecPLats() throws ResponseStatusException {
+    public void testModifierUtilisateurAvecPLats() {
         LocalDate anniv = LocalDate.of(1993, Month.MARCH, 28);
         LocalDateTime creation = LocalDateTime.of(2020, Month.APRIL, 17, 12, 00, 00);
         LocalDateTime disponible = LocalDateTime.of(2020, Month.APRIL, 18, 12, 00, 00);
@@ -183,12 +183,10 @@ public class UtilisateurServiceTest {
 
 
     @Test
-    public void testModifierUtilisateurQuiNExistePas() throws ResponseStatusException {
+    public void testModifierUtilisateurQuiNExistePas() {
         LocalDate anniv = LocalDate.of(1993, Month.MARCH, 28);
 
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO(5, "Helene", anniv, new ArrayList<PlatDTO>());
-
-        Utilisateur utilisateurSaved = new Utilisateur(5, "Helene", anniv);
 
         when(utilisateurRepository.findById(5)).thenReturn(Optional.empty());
 

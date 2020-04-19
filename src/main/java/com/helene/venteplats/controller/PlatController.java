@@ -28,14 +28,9 @@ public class PlatController {
         return platService.recupererPlat(id);
     }
 
-    @GetMapping(value = "/filtre/type")
+    @GetMapping
     public List<PlatDTO> listerPlats(CriteresDeRecherche criteresDeRecherche) {
         return platService.filtrerPlats(criteresDeRecherche);
-    }
-
-    @GetMapping(value = "/filtre/prix")
-    public List<PlatDTO> listerPlatsBis(CriteresDeRecherche criteresDeRecherche) {
-        return platService.filtrerPlatsPrix(criteresDeRecherche);
     }
 
     @GetMapping(value = "/filtre/date")
@@ -51,7 +46,7 @@ public class PlatController {
         if(id == idCurrentUser) {
             return platService.recupererPlatsUtilisateur(id);
         } else {
-            reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Cet utilisateur n'a pas le droit de réaliser cette action");
+            reponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Cet utilisateur n'a pas le droit de réaliser cette action");
             return null;
         }
     }
@@ -62,7 +57,7 @@ public class PlatController {
         if (idUtilisateur == idCurrentUser) {
             platService.supprimerPlat(id);
         } else {
-            reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Cet utilisateur n'a pas le droit de réaliser cette action");
+            reponse.sendError(HttpServletResponse.SC_FORBIDDEN,"Cet utilisateur n'a pas le droit de réaliser cette action");
         }
     }
 
@@ -80,7 +75,7 @@ public class PlatController {
         if (idCreateurPlat == idCurrentUser) {
             return platService.modifierPlat(platDTO, id);
         } else {
-            reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Cet utilisateur n'a pas le droit de réaliser cette action");
+            reponse.sendError(HttpServletResponse.SC_FORBIDDEN,"Cet utilisateur n'a pas le droit de réaliser cette action");
             return null;
         }
     }

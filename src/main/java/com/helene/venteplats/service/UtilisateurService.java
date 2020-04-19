@@ -18,7 +18,7 @@ public class UtilisateurService {
     @Autowired
     UtilisateurRepository utilisateurRepository;
 
-    public UtilisateurDTO recupererUtilisateur(int id) throws ResponseStatusException {
+    public UtilisateurDTO recupererUtilisateur(int id) {
         return UtilisateurDTO.objetToDTO(retourneUtilisateur(id));
     }
 
@@ -33,7 +33,7 @@ public class UtilisateurService {
         return UtilisateurDTO.objetToDTO(utilisateurRepository.save(utilisateur));
     }
 
-    public UtilisateurDTO modifiererUtilisateur(UtilisateurDTO utilisateurDTO, int id) throws ResponseStatusException {
+    public UtilisateurDTO modifiererUtilisateur(UtilisateurDTO utilisateurDTO, int id) {
         Utilisateur utilisateur = this.retourneUtilisateur(id);
         utilisateur.setNom(utilisateurDTO.getNom());
         utilisateur.setDateAnniv(utilisateurDTO.getAnniversaire());
@@ -41,7 +41,7 @@ public class UtilisateurService {
 
     }
 
-    private Utilisateur retourneUtilisateur(int id) throws ResponseStatusException {
+    private Utilisateur retourneUtilisateur(int id) {
         Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(id);
 
         if (!optionalUtilisateur.isPresent()) {

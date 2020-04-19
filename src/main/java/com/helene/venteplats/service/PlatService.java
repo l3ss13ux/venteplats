@@ -24,17 +24,8 @@ public class PlatService {
     @Autowired
     PlatRepository platRepository;
 
-    public Optional<Plat> retournePlat(int id) {
-        Optional<Plat> optionalPlat = platRepository.findById(id);
-        if (!optionalPlat.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ce plat n'existe pas en BD");
-        }
-        return optionalPlat;
-    }
-
     public PlatDTO recupererPlat(int id){
-        PlatDTO platDTO = new PlatDTO();
-        return platDTO.objetToDTO(this.retournePlat(id).get());
+        return PlatDTO.objetToDTO(this.retournePlat(id).get());
     }
 
     public List<PlatDTO> recupererTousLesPlats() {
@@ -126,6 +117,14 @@ public class PlatService {
         searchCriteria.setValue(dateTime);
         PlatSpecification platSpecification = new PlatSpecification(searchCriteria);
         return PlatDTO.listeObjetToDTO(platRepository.findAll(Specification.where(platSpecification)));
+    }
+
+    private Optional<Plat> retournePlat(int id) {
+        Optional<Plat> optionalPlat = platRepository.findById(id);
+        if (!optionalPlat.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ce plat n'existe pas en BD");
+        }
+        return optionalPlat;
     }
 
 }

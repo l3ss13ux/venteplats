@@ -107,7 +107,7 @@ public class PlatDTO {
 
     public static List<PlatDTO> listeObjetToDTO(List<Plat> plats) {
         List<PlatDTO> platsDto = new ArrayList<PlatDTO>();
-        if (!(plats == null)) {
+        if (plats != null) {
             for (Plat plat : plats) {
                 platsDto.add(objetToDTO(plat));
             }
