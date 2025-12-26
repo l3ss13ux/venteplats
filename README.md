@@ -27,6 +27,56 @@ idCreateur ayant accès à ma base de données et le port pour se connecter à l
  invite à vous rendre sur
  [le lien suivant](https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html).
 
+## Règles métier de l'application
+
+Cette section présente les règles métier implémentées dans l'application VentePlats pour aider les nouveaux développeurs à comprendre la logique fonctionnelle.
+
+### Règles de validation des données
+
+#### Pour les Plats
+* **Nom** : obligatoire, entre 3 et 27 caractères
+* **Type** : obligatoire (ex: entrée, plat, dessert)
+* **Prix** : obligatoire et ne peut pas être égal à 0
+* **Date de disponibilité** : obligatoire et doit être dans le futur
+* **Description** : optionnelle (valeur par défaut vide)
+* **Créateur** : un plat doit obligatoirement être associé à un utilisateur
+
+#### Pour les Utilisateurs
+* **Nom** : obligatoire, entre 3 et 27 caractères
+* **Date d'anniversaire** : doit être dans le passé
+
+### Règles d'authentification et autorisation
+
+#### Authentification
+* Toutes les requêtes nécessitent un header `idCurrentUser`
+* L'utilisateur doit exister en base de données pour effectuer des actions
+* Si l'utilisateur n'existe pas → erreur 401 (Unauthorized)
+
+#### Autorisation (qui peut faire quoi)
+* Un utilisateur ne peut **supprimer** que ses propres plats
+* Un utilisateur ne peut **modifier** que ses propres plats  
+* Un utilisateur ne peut **consulter** que ses propres plats (endpoint `/plats/utilisateur/{id}`)
+* Un utilisateur ne peut **supprimer** que son propre compte
+* Un utilisateur ne peut **modifier** que son propre profil
+* Toute tentative d'action non autorisée → erreur 403 (Forbidden)
+
+### Règles de cohérence des données
+
+#### Cascade et suppression
+* Quand un utilisateur est supprimé, tous ses plats sont automatiquement supprimés
+* La date de création des plats est générée automatiquement
+
+#### Gestion des erreurs
+* Si un plat demandé n'existe pas → erreur 404 (Not Found)
+* Si un utilisateur demandé n'existe pas → erreur 404 (Not Found)
+
+### Règles de recherche et filtrage
+
+* Les plats peuvent être filtrés par **type** (égalité exacte)
+* Les plats peuvent être filtrés par **prix maximum**
+* Les plats peuvent être filtrés par **date de disponibilité** (avant une date donnée)
+* Endpoint dédié : `/plats/filtre/date?disponibleAvant={dateTime}`
+
 
 
 
