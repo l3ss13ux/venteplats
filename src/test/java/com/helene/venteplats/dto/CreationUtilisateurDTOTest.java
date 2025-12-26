@@ -27,7 +27,7 @@ public class CreationUtilisateurDTOTest {
     }
 
     @Test
-    public void nomIsNull() {
+    public void shouldFailValidation_whenNomIsNull() {
         LocalDate anniv = LocalDate.of(1952, Month.MAY,13);
         CreationUtilisateurDTO creationUtilisateurDTO = new CreationUtilisateurDTO(null, anniv);
 
@@ -37,7 +37,7 @@ public class CreationUtilisateurDTOTest {
     }
 
     @Test
-    public void nomSizeIsBad() {
+    public void shouldFailValidation_whenNomSizeIsInvalid() {
         LocalDate anniv = LocalDate.of(1952, Month.MAY, 13);
         String nom = "h";
         CreationUtilisateurDTO creationUtilisateurDTO = new CreationUtilisateurDTO(nom, anniv);

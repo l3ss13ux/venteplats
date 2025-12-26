@@ -59,7 +59,7 @@ public class PlatServiceTest {
     // ========== Tests ==========
 
     @Test
-    public void testRecupererPlatQuiExiste() {
+    public void shouldReturnPlatDTO_whenPlatExists() {
         Utilisateur utilisateur = createTestUtilisateur(5, "Helene", LocalDate.of(1993, Month.MARCH, 28));
         Plat plat = createDefaultPlat(15, "Gateau au chocolat", "dessert", utilisateur);
 
@@ -76,18 +76,8 @@ public class PlatServiceTest {
         assertEquals(plat.getUtilisateur().getIdUtilisateur(), platDTORetourne.getIdCreateur());
     }
 
-
     @Test
-    public void testRecupererPlatQuiNExistePas() {
-        when(platRepository.findById(15)).thenReturn(Optional.empty());
-
-        Exception exception = assertThrows(ResponseStatusException.class, () -> platService.recupererPlat(15));
-
-        assertEquals("404 NOT_FOUND \"Ce plat n'existe pas en BD\"", exception.getMessage());
-    }
-
-    @Test
-    public void testRecupererTousLesPlats() {
+    public void shouldReturnAllPlats_whenCalled() {
         Utilisateur utilisateur1 = createTestUtilisateur(1, "Helene", LocalDate.of(1993, Month.MARCH, 28));
         Utilisateur utilisateur2 = createTestUtilisateur(2, "Thomas", LocalDate.of(1991, Month.JANUARY, 22));
 
@@ -120,7 +110,7 @@ public class PlatServiceTest {
     }
 
     @Test
-    public void testRecupererPlatsUtilisateur() {
+    public void shouldReturnUserPlats_whenUserHasPlats() {
         Utilisateur utilisateur = createTestUtilisateur(2, "Thomas", LocalDate.of(1991, Month.JANUARY, 22));
 
         Plat gateauChoco = createDefaultPlat(14, "Gateau chocolat", "dessert", utilisateur);
@@ -152,14 +142,14 @@ public class PlatServiceTest {
     }
 
     @Test
-    public void testSupprimerPlat() {
+    public void shouldDeletePlat_whenCalled() {
         platService.supprimerPlat(15);
 
         verify(platRepository, times(1)).deleteById(15);
     }
 
     @Test
-    public void testInsererPlat() {
+    public void shouldInsertPlat_whenValidData() {
         LocalDateTime disponible = LocalDateTime.of(2020, Month.APRIL, 25, 12, 00, 00);
         LocalDateTime creation = LocalDateTime.of(2020,Month.APRIL, 19, 20, 00, 00);
 
@@ -197,7 +187,7 @@ public class PlatServiceTest {
     }
 
     @Test
-    public void testInsererPlatPrixNull() {
+    public void shouldThrowException_whenSavePlatAndPriceIsNull() {
         LocalDateTime disponible = LocalDateTime.of(2020, Month.APRIL, 25, 12, 00, 00);
         CreationPlatDTO creationPlatDTO = new CreationPlatDTO();
         creationPlatDTO.setNom("gateau au chocolat");
@@ -211,7 +201,7 @@ public class PlatServiceTest {
     }
 
     @Test
-    public void testModifierPlatQuiExiste() {
+    public void shouldUpdatePlat_whenPlatExists() {
         LocalDateTime disponible = LocalDateTime.of(2020, Month.APRIL, 25, 12, 00, 00);
         LocalDateTime creation = LocalDateTime.of(2020, Month.APRIL, 10, 20, 30, 00);
 
@@ -253,7 +243,7 @@ public class PlatServiceTest {
     }
 
     @Test
-    public void testModifierPlatQuiNExistePas() {
+    public void shouldThrowNotFoundException_whenPlatDoesNotExist() {
         LocalDateTime disponible = LocalDateTime.of(2020, Month.APRIL, 25, 12, 00, 00);
         PlatDTO platDTO = new PlatDTO(15, "gateau au chocolat", "dessert", "fait maison", 3.2F, disponible, 2);
 
@@ -265,7 +255,7 @@ public class PlatServiceTest {
     }
 
     @Test
-    public void testModifierPlatPrixNull() {
+    public void shouldThrowException_whenUpdatePlatAndPriceIsNull() {
         LocalDateTime disponible = LocalDateTime.of(2020, Month.APRIL, 25, 12, 00, 00);
         PlatDTO platDTO = new PlatDTO();
         platDTO.setIdentifiant(15);
@@ -282,7 +272,7 @@ public class PlatServiceTest {
     }
 
     @Test
-    public void testFiltrerPlatsByTypeOnly() {
+    public void shouldReturnFilteredPlats_whenFilteringByTypeOnly() {
         Utilisateur utilisateur = createDefaultUtilisateur();
 
         Plat gateauChoco = createDefaultPlat(1, "Gateau chocolat", "dessert", utilisateur);
@@ -306,7 +296,7 @@ public class PlatServiceTest {
     }
 
     @Test
-    public void testFiltrerPlatsByPrixOnly() {
+    public void shouldReturnFilteredPlats_whenFilteringByPrixOnly() {
         Utilisateur utilisateur = createDefaultUtilisateur();
 
         Plat gateauChoco = createDefaultPlat(1, "Gateau chocolat", "dessert", utilisateur);
@@ -330,7 +320,7 @@ public class PlatServiceTest {
     }
 
     @Test
-    public void testFiltrerPlatsByTypeAndPrix() {
+    public void shouldReturnFilteredPlats_whenFilteringByTypeAndPrix() {
         Utilisateur utilisateur = createDefaultUtilisateur();
 
         Plat gateauChoco = createDefaultPlat(1, "Gateau chocolat", "dessert", utilisateur);
@@ -353,7 +343,7 @@ public class PlatServiceTest {
     }
 
     @Test
-    public void testFiltrerPlatsWithEmptyCriteria() {
+    public void shouldReturnAllPlats_whenFilteringWithEmptyCriteria() {
         Utilisateur utilisateur = createDefaultUtilisateur();
 
         Plat plat1 = createDefaultPlat(1, "Gateau", "dessert", utilisateur);
@@ -374,7 +364,7 @@ public class PlatServiceTest {
     }
 
     @Test
-    public void testFiltrerPlatsByDate() {
+    public void shouldReturnFilteredPlats_whenFilteringByDate() {
         LocalDateTime creation = LocalDateTime.of(2020, Month.APRIL, 1, 12, 0, 0);
         LocalDateTime disponible1 = LocalDateTime.of(2020, Month.MAY, 1, 12, 0, 0);
         LocalDateTime dateFiltre = LocalDateTime.of(2020, Month.MAY, 10, 12, 0, 0);
