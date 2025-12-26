@@ -5,6 +5,7 @@ import com.helene.venteplats.dto.PlatDTO;
 import com.helene.venteplats.model.Plat;
 import com.helene.venteplats.model.Utilisateur;
 import com.helene.venteplats.repository.PlatRepository;
+import com.helene.venteplats.service.critere.CriteresDeRecherche;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +13,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
@@ -32,13 +34,34 @@ public class PlatServiceTest {
     @Mock
     PlatRepository platRepository;
 
+    // ========== Helper Methods for Test Data Creation ==========
+
+    private Utilisateur createTestUtilisateur(int id, String nom, LocalDate anniv) {
+        return new Utilisateur(id, nom, anniv);
+    }
+
+    private Utilisateur createDefaultUtilisateur() {
+        return createTestUtilisateur(2, "Helene", LocalDate.of(1993, Month.MARCH, 28));
+    }
+
+    private Plat createTestPlat(int id, String nom, String type, String description,
+                                float prix, LocalDateTime creation, LocalDateTime disponible,
+                                Utilisateur utilisateur) {
+        return new Plat(id, nom, type, description, prix, creation, disponible, utilisateur);
+    }
+
+    private Plat createDefaultPlat(int id, String nom, String type, Utilisateur utilisateur) {
+        LocalDateTime creation = LocalDateTime.of(2020, Month.APRIL, 9, 12, 0, 0);
+        LocalDateTime disponible = LocalDateTime.of(2020, Month.MAY, 9, 12, 0, 0);
+        return createTestPlat(id, nom, type, "fait maison", 3.2F, creation, disponible, utilisateur);
+    }
+
+    // ========== Tests ==========
+
     @Test
     public void testRecupererPlatQuiExiste() {
-        LocalDateTime creation = LocalDateTime.of(2020, Month.APRIL, 9, 12, 00, 00);
-        LocalDateTime disponible = LocalDateTime.of(2020, Month.MAY, 9, 12, 00,00);
-        LocalDate anniv = LocalDate.of(1993, Month.MARCH, 28);
-        Utilisateur utilisateur = new Utilisateur(5, "Helene", anniv);
-        Plat plat = new Plat(15, "Gateau au chocolat", "dessert", "fait maison", 3.2F, creation, disponible, utilisateur);
+        Utilisateur utilisateur = createTestUtilisateur(5, "Helene", LocalDate.of(1993, Month.MARCH, 28));
+        Plat plat = createDefaultPlat(15, "Gateau au chocolat", "dessert", utilisateur);
 
         when(platRepository.findById(15)).thenReturn(Optional.of(plat));
 
@@ -65,16 +88,13 @@ public class PlatServiceTest {
 
     @Test
     public void testRecupererTousLesPlats() {
-        LocalDateTime creationGateau = LocalDateTime.of(2020, Month.APRIL, 01, 18, 00, 00);
-        LocalDateTime creationGalette = LocalDateTime.of(2020, Month.FEBRUARY, 22, 12, 00, 00);
-        LocalDateTime disponible = LocalDateTime.of(2020, Month.APRIL, 19, 16, 00, 00);
-        LocalDate dateAnniv1 = LocalDate.of(1993, Month.MARCH, 28);
-        LocalDate dateAnniv2 = LocalDate.of(1991, Month.JANUARY, 22);
-        Utilisateur utilisateur1 = new Utilisateur(1, "Helene", dateAnniv1);
-        Utilisateur utilisateur2 = new Utilisateur(2, "Thomas", dateAnniv2);
-        Plat gateauChoco = new Plat(14, "Gateau chocolat", "dessert", "fait maison", 3.2F, creationGateau, disponible, utilisateur1);
-        Plat galetteBretonne = new Plat(15, "galette bretonne", "repas", "fait maison", 9.90F, creationGalette, disponible, utilisateur2);
-        List<Plat> listePlats = new ArrayList<Plat>();
+        Utilisateur utilisateur1 = createTestUtilisateur(1, "Helene", LocalDate.of(1993, Month.MARCH, 28));
+        Utilisateur utilisateur2 = createTestUtilisateur(2, "Thomas", LocalDate.of(1991, Month.JANUARY, 22));
+
+        Plat gateauChoco = createDefaultPlat(14, "Gateau chocolat", "dessert", utilisateur1);
+        Plat galetteBretonne = createDefaultPlat(15, "galette bretonne", "repas", utilisateur2);
+
+        List<Plat> listePlats = new ArrayList<>();
         listePlats.add(gateauChoco);
         listePlats.add(galetteBretonne);
 
@@ -101,14 +121,12 @@ public class PlatServiceTest {
 
     @Test
     public void testRecupererPlatsUtilisateur() {
-        LocalDateTime creationGateau = LocalDateTime.of(2020, Month.APRIL, 01, 18, 00, 00);
-        LocalDateTime creationGalette = LocalDateTime.of(2020, Month.FEBRUARY, 22, 12, 00, 00);
-        LocalDateTime disponible = LocalDateTime.of(2020, Month.APRIL, 19, 16, 00, 00);
-        LocalDate dateAnniv = LocalDate.of(1991, Month.JANUARY, 22);
-        Utilisateur utilisateur = new Utilisateur(2, "Thomas", dateAnniv);
-        Plat gateauChoco = new Plat(14, "Gateau chocolat", "dessert", "fait maison", 3.2F, creationGateau, disponible, utilisateur);
-        Plat galetteBretonne = new Plat(15, "galette bretonne", "repas", "fait maison", 9.90F, creationGalette, disponible, utilisateur);
-        List<Plat> listePlats = new ArrayList<Plat>();
+        Utilisateur utilisateur = createTestUtilisateur(2, "Thomas", LocalDate.of(1991, Month.JANUARY, 22));
+
+        Plat gateauChoco = createDefaultPlat(14, "Gateau chocolat", "dessert", utilisateur);
+        Plat galetteBretonne = createDefaultPlat(15, "galette bretonne", "repas", utilisateur);
+
+        List<Plat> listePlats = new ArrayList<>();
         listePlats.add(gateauChoco);
         listePlats.add(galetteBretonne);
 
@@ -144,7 +162,7 @@ public class PlatServiceTest {
     public void testInsererPlat() {
         LocalDateTime disponible = LocalDateTime.of(2020, Month.APRIL, 25, 12, 00, 00);
         LocalDateTime creation = LocalDateTime.of(2020,Month.APRIL, 19, 20, 00, 00);
-        LocalDate anniv = LocalDate.of(1993, Month.MARCH, 28);
+
         CreationPlatDTO creationPlatDTO = new CreationPlatDTO();
         creationPlatDTO.setNom("gateau au chocolat");
         creationPlatDTO.setType("dessert");
@@ -152,9 +170,8 @@ public class PlatServiceTest {
         creationPlatDTO.setDescription("fait maison");
         creationPlatDTO.setDisponible(disponible);
 
-        Utilisateur utilisateur = new Utilisateur(2, "Helene", anniv);
-
-        Plat platCree = new Plat(15, "gateau au chocolat", "dessert", "fait maison", 3.2F, creation, disponible, utilisateur);
+        Utilisateur utilisateur = createDefaultUtilisateur();
+        Plat platCree = createTestPlat(15, "gateau au chocolat", "dessert", "fait maison", 3.2F, creation, disponible, utilisateur);
 
         when(platRepository.save(any(Plat.class))).thenReturn(platCree);
 
@@ -197,12 +214,11 @@ public class PlatServiceTest {
     public void testModifierPlatQuiExiste() {
         LocalDateTime disponible = LocalDateTime.of(2020, Month.APRIL, 25, 12, 00, 00);
         LocalDateTime creation = LocalDateTime.of(2020, Month.APRIL, 10, 20, 30, 00);
-        LocalDate anniv = LocalDate.of(1993, Month.MARCH, 28);
 
-        Utilisateur utilisateur = new Utilisateur(2, "Helene", anniv);
+        Utilisateur utilisateur = createDefaultUtilisateur();
         PlatDTO platDTO = new PlatDTO(15, "galette bretonne", "plat", "norvegienne", 11.0F, disponible, 2);
-        Plat platBD = new Plat(15, "gateau au chocolat", "dessert", "fait maison", 3.2F, creation, disponible, utilisateur);
-        Plat platSauvegarde = new Plat(15, "galette bretonne", "plat", "norvegienne", 11.0F, creation, disponible, utilisateur);
+        Plat platBD = createTestPlat(15, "gateau au chocolat", "dessert", "fait maison", 3.2F, creation, disponible, utilisateur);
+        Plat platSauvegarde = createTestPlat(15, "galette bretonne", "plat", "norvegienne", 11.0F, creation, disponible, utilisateur);
 
         when(platRepository.findById(15)).thenReturn(Optional.of(platBD));
 
@@ -263,5 +279,118 @@ public class PlatServiceTest {
 
         assertEquals("404 NOT_FOUND \"Le prix ne peut être null\"", exception.getMessage());
 
+    }
+
+    @Test
+    public void testFiltrerPlatsByTypeOnly() {
+        Utilisateur utilisateur = createDefaultUtilisateur();
+
+        Plat gateauChoco = createDefaultPlat(1, "Gateau chocolat", "dessert", utilisateur);
+        Plat tarte = createDefaultPlat(2, "Tarte aux pommes", "dessert", utilisateur);
+
+        List<Plat> platsFiltered = new ArrayList<>();
+        platsFiltered.add(gateauChoco);
+        platsFiltered.add(tarte);
+
+        CriteresDeRecherche criteres = new CriteresDeRecherche();
+        criteres.setTypeEqual("dessert");
+
+        when(platRepository.findAll(any(Specification.class))).thenReturn(platsFiltered);
+
+        List<PlatDTO> result = platService.filtrerPlats(criteres);
+
+        assertEquals(2, result.size());
+        assertEquals("dessert", result.get(0).getType());
+        assertEquals("dessert", result.get(1).getType());
+        verify(platRepository, times(1)).findAll(any(Specification.class));
+    }
+
+    @Test
+    public void testFiltrerPlatsByPrixOnly() {
+        Utilisateur utilisateur = createDefaultUtilisateur();
+
+        Plat gateauChoco = createDefaultPlat(1, "Gateau chocolat", "dessert", utilisateur);
+        Plat tarte = createDefaultPlat(2, "Tarte aux pommes", "dessert", utilisateur);
+
+        List<Plat> platsFiltered = new ArrayList<>();
+        platsFiltered.add(gateauChoco);
+        platsFiltered.add(tarte);
+
+        CriteresDeRecherche criteres = new CriteresDeRecherche();
+        criteres.setPrixInf(10.0F);
+
+        when(platRepository.findAll(any(Specification.class))).thenReturn(platsFiltered);
+
+        List<PlatDTO> result = platService.filtrerPlats(criteres);
+
+        assertEquals(2, result.size());
+        assertTrue(result.get(0).getPrix() <= 10.0F);
+        assertTrue(result.get(1).getPrix() <= 10.0F);
+        verify(platRepository, times(1)).findAll(any(Specification.class));
+    }
+
+    @Test
+    public void testFiltrerPlatsByTypeAndPrix() {
+        Utilisateur utilisateur = createDefaultUtilisateur();
+
+        Plat gateauChoco = createDefaultPlat(1, "Gateau chocolat", "dessert", utilisateur);
+
+        List<Plat> platsFiltered = new ArrayList<>();
+        platsFiltered.add(gateauChoco);
+
+        CriteresDeRecherche criteres = new CriteresDeRecherche();
+        criteres.setTypeEqual("dessert");
+        criteres.setPrixInf(10.0F);
+
+        when(platRepository.findAll(any(Specification.class))).thenReturn(platsFiltered);
+
+        List<PlatDTO> result = platService.filtrerPlats(criteres);
+
+        assertEquals(1, result.size());
+        assertEquals("dessert", result.get(0).getType());
+        assertTrue(result.get(0).getPrix() <= 10.0F);
+        verify(platRepository, times(1)).findAll(any(Specification.class));
+    }
+
+    @Test
+    public void testFiltrerPlatsWithEmptyCriteria() {
+        Utilisateur utilisateur = createDefaultUtilisateur();
+
+        Plat plat1 = createDefaultPlat(1, "Gateau", "dessert", utilisateur);
+        Plat plat2 = createDefaultPlat(2, "Pizza", "plat", utilisateur);
+
+        List<Plat> allPlats = new ArrayList<>();
+        allPlats.add(plat1);
+        allPlats.add(plat2);
+
+        CriteresDeRecherche criteres = new CriteresDeRecherche();
+
+        when(platRepository.findAll(any(Specification.class))).thenReturn(allPlats);
+
+        List<PlatDTO> result = platService.filtrerPlats(criteres);
+
+        assertEquals(2, result.size());
+        verify(platRepository, times(1)).findAll(any(Specification.class));
+    }
+
+    @Test
+    public void testFiltrerPlatsByDate() {
+        LocalDateTime creation = LocalDateTime.of(2020, Month.APRIL, 1, 12, 0, 0);
+        LocalDateTime disponible1 = LocalDateTime.of(2020, Month.MAY, 1, 12, 0, 0);
+        LocalDateTime dateFiltre = LocalDateTime.of(2020, Month.MAY, 10, 12, 0, 0);
+
+        Utilisateur utilisateur = createDefaultUtilisateur();
+        Plat platDispo1 = createTestPlat(1, "Gateau chocolat", "dessert", "fait maison", 5.0F, creation, disponible1, utilisateur);
+
+        List<Plat> platsFiltered = new ArrayList<>();
+        platsFiltered.add(platDispo1);
+
+        when(platRepository.findAll(any(Specification.class))).thenReturn(platsFiltered);
+
+        List<PlatDTO> result = platService.filtrerPlatsDate(dateFiltre);
+
+        assertEquals(1, result.size());
+        assertTrue(result.get(0).getDisponible().isBefore(dateFiltre));
+        verify(platRepository, times(1)).findAll(any(Specification.class));
     }
 }
