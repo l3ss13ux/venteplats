@@ -78,12 +78,12 @@ public class PlatService {
         if (critere.getTypeEqual() != null ) {
             searchCriteria1.setKey("type");
             searchCriteria1.setOperation("=");
-            searchCriteria1.setValue(critere.getTypeEqual());
+            searchCriteria1.setStringValue(critere.getTypeEqual());
         }
         if (critere.getPrixInf() != 0.0) {
             searchCriteria2.setKey("prix");
             searchCriteria2.setOperation("<=");
-            searchCriteria2.setValue(critere.getPrixInf());
+            searchCriteria2.setPrixValue(critere.getPrixInf());
         }
         /*
         if (critere.getDisponibleAvant() != null) {
@@ -114,7 +114,7 @@ public class PlatService {
         SearchCriteria searchCriteria = new SearchCriteria();
         searchCriteria.setKey("dateDispo");
         searchCriteria.setOperation("<");
-        searchCriteria.setValue(dateTime);
+        searchCriteria.setDateValue(dateTime);
         PlatSpecification platSpecification = new PlatSpecification(searchCriteria);
         return PlatDTO.listeObjetToDTO(platRepository.findAll(Specification.where(platSpecification)));
     }

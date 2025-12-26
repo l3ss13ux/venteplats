@@ -1,8 +1,8 @@
 package com.helene.venteplats.dtoTest;
 
 import com.helene.venteplats.dto.CreationUtilisateurDTO;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 
 
 import javax.validation.ConstraintViolation;
@@ -20,7 +20,7 @@ public class CreationUtilisateurDTOTest {
 
     private static Validator validator;
 
-    @BeforeTestClass
+    @BeforeAll
     public static void setUp() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
@@ -33,7 +33,7 @@ public class CreationUtilisateurDTOTest {
 
         Set<ConstraintViolation<CreationUtilisateurDTO>> constraintViolations = validator.validate(creationUtilisateurDTO);
         assertEquals(1, constraintViolations.size());
-        assertEquals("ne doit pas être null", constraintViolations.iterator().next().getMessage());
+        assertEquals("ne doit pas être vide", constraintViolations.iterator().next().getMessage());
     }
 
     @Test
@@ -44,7 +44,7 @@ public class CreationUtilisateurDTOTest {
 
         Set<ConstraintViolation<CreationUtilisateurDTO>> constraintViolations = validator.validate(creationUtilisateurDTO);
         assertEquals(1,constraintViolations.size());
-        assertEquals("le nombre de caractères du nom est incorrect",constraintViolations.iterator().next().getMessage());
+        assertEquals("entre 3 et 27 caractères",constraintViolations.iterator().next().getMessage());
     }
 
 }
